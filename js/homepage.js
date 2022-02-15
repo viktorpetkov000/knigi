@@ -24,7 +24,7 @@ function loadLatest(id, image, title, price, description, length, type) {
 		wrapAround: true
 	});
 	let item =
-	`<div class="carousel-cell" onClick="viewItem('`+ id +`', '` + title  + `','` + image + `', '`+ description + `','` + price + `')">
+	`<div class="carousel-cell" onClick="viewItem('`+ id + `')">
     <div class="new-item-container-inner">
       <img class="new-item-image" src="files/` + image + `">
       <div class="new-item-title">` + title + `</div>

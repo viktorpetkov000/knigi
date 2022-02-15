@@ -1643,6 +1643,50 @@ body {
 	border-bottom-right-radius: 0;
 }
 
+.item-window-dialog {
+	max-width: 90%;
+}
+
+.item-window-topbar {
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+.item-window-return-button, .item-window-save-button, .item-window-cat-button {
+	margin-top: -5px;
+}
+
+.item-window-return {
+	cursor: pointer;
+}
+
+.item-window-save {
+	margin-left: 25px;
+	cursor: pointer;
+}
+
+.item-window-cat {
+	margin-left: 20%;
+}
+
+.item-window-cat-button {
+	width: 30px;
+}
+
+.item-window-cat {
+	cursor: pointer;
+}
+
+.item-window-topbar-text {
+	font-family: Yanone Kaffeesatz;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 24px;
+	line-height: 24px;
+	color: #CE4257;
+}
+
 @media only screen and (max-width: 770px) {
 	.logo-main, .separator-menu {
 		display: none;

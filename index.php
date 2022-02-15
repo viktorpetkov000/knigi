@@ -49,6 +49,13 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal fade" id="item-window" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered item-window-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-body" id="item-window-form"></div>
+				</div>
+			</div>
+		</div>
 		<div class="main-container">
 			<div class="category-container">
 				<div class="category-menu">
