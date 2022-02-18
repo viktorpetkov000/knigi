@@ -1,15 +1,3 @@
-// function viewItem(id, title, image, description, price) {
-// 	$("#windowTitle").html(title);
-// 	$("#windowForm").html(
-// 		`<div class="d-flex flex-column text-center">
-// 			<img src="files/` + image + `" class="item-large-image">
-// 			<div class="item-large-price">` + price + `лв</div>
-// 			<div class="item-large-descr">` + description + `</div>
-// 			<button type="submit" class="btn btn-info btn-block btn-round" onClick="gotoItem(` + id + `)">Към продажбата</button>
-// 		</div>`)
-// 	$("#window").modal('show');
-// }
-
 function viewItem(id) {
   formData = new FormData;
   formData.append('id', id);
@@ -40,17 +28,30 @@ function viewItem(id) {
 						</div>
 					</div>
 					<div class="item-window-images">
-					
+						<div class="item-window-images-outer">
+							<div class="item-window-images-inner">
+								<div class="carousel-window">
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				`);
-				// $("#windowForm").html(
-				// 	`<div class="d-flex flex-column text-center">
-				// 		<img src="files/` + result.items[0].image + `" class="item-large-image">
-				// 		<div class="item-large-price">` + result.items[0].price + `лв</div>
-				// 		<div class="item-large-descr">` + result.items[0].descr + `</div>
-				// 	</div>`)
+				var $carouselWindow = $('.carousel-window').flickity({
+					initialIndex: 0,
+					wrapAround: true,
+					cellSelector: '.item-window-image-cell'
+				});
+				let item = `<div class="item-window-image-cell"><img src="./assets/save.png" class="item-window-image"/></div>`
+				$carouselWindow.flickity('append', $(item));
+				$carouselWindow.flickity('append', $(item));
+				$carouselWindow.flickity( 'select', 0);
 				$("#item-window").modal('show');
+				let timer = setTimeout(resize, 200);
+				function resize() {
+					$carouselWindow.flickity('resize')
+					clearTimeout(timer);
+				}
       } else showMessage("Няма такава продажба.");
     },
 	});

@@ -31,7 +31,6 @@ function loadLatest(id, image, title, price, description, length, type) {
       <div class="new-item-price">` + price + `<span class="bgn">` + " BGN"+ `</span></div>
     </div>
 	</div>`
-  //$(".latest-items").append(item);
 	$carousel.flickity( 'append', $(item));
 	$carousel.flickity( 'select', 4);
 }

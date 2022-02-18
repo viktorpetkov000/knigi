@@ -1678,6 +1678,16 @@ body {
 	cursor: pointer;
 }
 
+.item-window-image-cell {
+	background: linear-gradient(73.37deg, #D6C9BE 1.88%, #FDF4EC 90.1%)!important;
+	cursor: pointer;
+	border-radius: 4px;
+  width: 15%;
+	height: 35vh;
+	padding: 10px;
+	margin-right: 2%;
+}
+
 .item-window-topbar-text {
 	font-family: Yanone Kaffeesatz;
 	font-style: normal;
