@@ -41,12 +41,12 @@ function viewItem(id) {
 							<div class="item-window-info1-title">
 								<span class="item-window-info1-title-text">Мед и Мляко - Иван Вазов - 1905г</span>
 							</div>
-							<div class="item-window-info1-description">
-								<span class="item-window-info1-description-text-title">Описание:</span>
-								<img src="./assets/separator.png"/>
-								<span class="item-window-info1-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur vestibulum nunc consequat eget morbi nisl. Odio nulla turpis in lacus vel in. Tincidunt sed nulla habitant turpis tempor elementum purus nullam posuere. Leo vitae nam et, massa quam tempor sit nullam posuere. Aenean lacus libero adipiscing laoreet porttitor elit. Velit dictum erat nunc, adipiscing pulvinar cras a. A, habitant et pellentesque id dignissim egestas. Est arcu curabitur neque, quis commodo, sit suspendisse nibh</span>
-							</div>
 							<div class="item-window-info1-combine">
+								<div class="item-window-info1-description">
+									<span class="item-window-info1-description-text-title">Описание:</span>
+									<img src="./assets/separator.png"/>
+									<span class="item-window-info1-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur vestibulum nunc consequat eget morbi nisl. Odio nulla turpis in lacus vel in. Tincidunt sed nulla habitant turpis tempor elementum purus nullam posuere. Leo vitae nam et, massa quam tempor sit nullam posuere. Aenean lacus libero adipiscing laoreet porttitor elit. Velit dictum erat nunc, adipiscing pulvinar cras a. A, habitant et pellentesque id dignissim egestas. Est arcu curabitur neque, quis commodo, sit suspendisse nibh</span>
+								</div>
 								<div class="item-window-info1-specs">
 									<span class="item-window-info1-description-text-title">Характеристики:</span>
 									<img src="./assets/separator.png"/>
@@ -59,12 +59,8 @@ function viewItem(id) {
 										<br>
 										Обем: <span class="item-window-info1-spec-size item-window-info1-spec-text2">210 стр.</span>
 										<br>
+										Състояние: <span class="item-window-info1-spec-condition item-window-info1-spec-text2">Ново</span>
 									</span>
-								</div>
-								<div class="item-window-info1-condition">
-									<span class="item-window-info1-condition-text-title">Състояние:</span>
-									<img src="./assets/separator.png"/>
-									<span class="item-window-info1-condition-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur vestibulum nunc consequat eget morbi nisl. Odio nulla turpis in lacus vel in. Tincidunt sed nulla habitant turpis tempor elementum purus nullam posuere. </span>
 								</div>
 							</div>
 						</div>
@@ -115,7 +111,7 @@ function viewItem(id) {
         }
 				$(".item-window-info1-title-text").html(result.items[0].title);
 				$(".item-window-info1-description-text").html(result.items[0].descr);
-				$(".item-window-info1-condition-text").html(condit);
+				$(".item-window-info1-spec-condition").html(condit);
 				$(".item-window-info2-price-text").html(result.items[0].price);
 				$(".item-window-info1-spec-author").html(result.items[0].author);
 				$(".item-window-info1-spec-publisher").html(result.items[0].publisher);

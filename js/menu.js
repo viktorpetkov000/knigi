@@ -34,6 +34,7 @@ let newMenu =
           <a class="dropdown-item" href="#" onclick="getUserItems(0)">Активни продажби</a>
           <a class="dropdown-item" href="#" onclick="getUserItems(1)">Приключени продажби</a>
           <a class="dropdown-item" href="#" onclick="viewPurchases()">Направени поръчки</a>
+					<a class="dropdown-item" href="#" onclick="logoutAccount()">Изход</a>
         </div>
       </div>
 			<li class="nav-item">
@@ -44,7 +45,7 @@ let newMenu =
         <a class="nav-link" href="#" onClick="createItemForm()">Създай продажба</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" onClick="logoutAccount()">Изход</a>
+        <a class="nav-link" href="#">Празно</a>
       </li>
   </ul>`
     

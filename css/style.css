@@ -1246,6 +1246,7 @@ body {
 
 .dropdown-item:hover {
 	background-color: #CE4257;
+	color: white!important;
 }
 
 .about-header-container {
@@ -1639,7 +1640,7 @@ body {
  width: 25vw;
 }
 
-.item-window-info1-description, .item-window-info1-specs, .item-window-info1-condition {
+.item-window-info1-description, .item-window-info1-specs {
 	display: flex;
 	flex-direction: column;
 	margin-top: 20px;
@@ -1652,11 +1653,7 @@ body {
 
 .item-window-info1-specs {
 	width: 35%;
-}
-
-.item-window-info1-condition {
-	width: 60%;
-	margin-left: 5%;
+	margin-left: 20px;
 }
 
 .item-window-info1-description-text-title, .item-window-info1-condition-text-title {
