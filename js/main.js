@@ -29,8 +29,10 @@ function viewItem(id) {
 					</div>
 					<div class="item-window-row">
 						<div class="item-window-images">
-							<div class="item-window-image-main">
-								<img src="./assets/save.png" class="item-window-image-main-image"/>
+							<div class="item-window-image-main-container">
+								<div class="item-window-image-main">
+									<img src="./assets/save.png" class="item-window-image-main-image"/>
+								</div>
 							</div>
 							<div class="carousel-window">
 							</div>
@@ -60,9 +62,9 @@ function viewItem(id) {
 									</span>
 								</div>
 								<div class="item-window-info1-condition">
-									<span class="item-window-info1-description-text-title">Състояние:</span>
+									<span class="item-window-info1-condition-text-title">Състояние:</span>
 									<img src="./assets/separator.png"/>
-									<span class="item-window-info1-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur vestibulum nunc consequat eget morbi nisl. Odio nulla turpis in lacus vel in. Tincidunt sed nulla habitant turpis tempor elementum purus nullam posuere. </span>
+									<span class="item-window-info1-condition-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur vestibulum nunc consequat eget morbi nisl. Odio nulla turpis in lacus vel in. Tincidunt sed nulla habitant turpis tempor elementum purus nullam posuere. </span>
 								</div>
 							</div>
 						</div>
@@ -84,15 +86,63 @@ function viewItem(id) {
 				`);
 				var $carouselWindow = $('.carousel-window').flickity({
 					initialIndex: 0,
-					wrapAround: true,
+					wrapAround: false,
 					cellSelector: '.item-window-image-cell'
 				});
+				$(".item-window-image-main-image").prop("src", './files/' + result.items[0].image);
 				let item = `<div class="item-window-image-cell"><img src="./assets/save.png" class="item-window-image"/></div>`
-				$carouselWindow.flickity('append', $(item));
-				$carouselWindow.flickity('append', $(item));
-				$carouselWindow.flickity('append', $(item));
-				$carouselWindow.flickity('append', $(item));
+				for (i = 0; i < result.items.length; i++) {
+          item = `<div class="item-window-image-cell" name="` + i + `")"><img src="./files/` + result.items[i].name + `"/></div>`;
+					$carouselWindow.flickity('append', $(item));
+				}
+				let condit = "";
+        switch (result.items[0].condit) {
+          case "1": 
+          condit = "Ново"
+          break;
+          case "2": 
+          condit = "Отлично"
+          break;
+          case "3": 
+          condit = "Много добро"
+          break;
+          case "4": 
+          condit = "Добро"
+          break;
+          case "5": 
+          condit = "Лошо"
+          break;
+        }
+				$(".item-window-info1-title-text").html(result.items[0].title);
+				$(".item-window-info1-description-text").html(result.items[0].descr);
+				$(".item-window-info1-condition-text").html(condit);
+				$(".item-window-info2-price-text").html(result.items[0].price);
+				$(".item-window-info1-spec-author").html(result.items[0].author);
+				$(".item-window-info1-spec-publisher").html(result.items[0].publisher);
+				$(".item-window-info1-spec-year").html(result.items[0].year);
+				$(".item-window-info1-spec-size").html(result.items[0].size);
 				$("#item-window").modal('show');
+				$( "#item-window .next" ).click(function() {
+					$( ".item-window-image-cell" ).each(function() {
+						if ($(this).hasClass( "is-selected" )) {
+							$(".item-window-image-main-image").prop("src", $(this).children().prop("src"));
+						};
+					});
+				});
+				$( "#item-window .previous" ).click(function() {
+					$( ".item-window-image-cell" ).each(function() {
+						if ($(this).hasClass( "is-selected" )) {
+							$(".item-window-image-main-image").prop("src", $(this).children().prop("src"));
+						};
+					});
+				});
+				$( ".item-window-image-cell" ).click(function() {
+					$(".item-window-image-main-image").prop("src", $(this).children().prop("src"));
+					$carouselWindow.flickity('select', $(this).attr('name'));
+				});
+				$( ".item-window-return" ).click(function() {
+					$('#item-window').modal('toggle');
+				});
 				let timer = setTimeout(resize, 200);
 				function resize() {
 					$carouselWindow.flickity('resize')
