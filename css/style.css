@@ -1643,14 +1643,25 @@ body {
 	border-bottom-right-radius: 0;
 }
 
+#item-window .modal-content {
+	background-color: rgba(255,255,255,0.8);
+}
+
+#item-window .modal-content::after {
+	-webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="none"><polygon points="1.6,0.4 0.4,1.6 0.4,198.4 1.4,199.4 199,199.4 199.6,197.4 199.6,2 198.6,0.4 " fill="black"/></svg>') 0/100% 100%, linear-gradient(#fff,#fff);
+	-webkit-mask-composite: destination-out;
+}
+
 .item-window-dialog {
-	max-width: 90%;
+	max-width: 95%;
+	margin-left: 3%;
 }
 
 .item-window-topbar {
 	display: flex;
 	align-items: center;
 	width: 100%;
+	margin-bottom: 20px;
 }
 
 .item-window-return-button, .item-window-save-button, .item-window-cat-button {
@@ -1679,13 +1690,18 @@ body {
 }
 
 .item-window-image-cell {
-	background: linear-gradient(73.37deg, #D6C9BE 1.88%, #FDF4EC 90.1%)!important;
 	cursor: pointer;
 	border-radius: 4px;
-  width: 15%;
-	height: 35vh;
-	padding: 10px;
-	margin-right: 2%;
+  width: 40%;
+	height: 17vh;
+	display:flex;
+  align-items:center;
+  justify-content:center;
+	border: 1px solid black;
+}
+
+.item-window-image {
+	object-fit: cover;
 }
 
 .item-window-topbar-text {
@@ -1695,6 +1711,191 @@ body {
 	font-size: 24px;
 	line-height: 24px;
 	color: #CE4257;
+}
+
+.item-window-container .flickity-button, 
+.item-window-container .flickity-prev-next-button,
+.item-window-container .flickity-button-icon  {
+	transform: scale(0.75);
+}
+
+.item-window-container .flickity-button {
+	top: 20%;
+}
+
+.item-window-row {
+	display:flex;
+	flex-direction: row;
+}
+
+.item-window-images {
+	display: flex;
+	flex-direction: column;
+}
+
+.carousel-window .flickity-page-dots {
+	margin-bottom: -25px;
+}
+
+.item-window-info1 {
+	display: flex;
+	flex-direction: column;
+	margin-left: 2%;
+	width: 60%;
+}
+
+.item-window-info1-title {
+	background: #FFFBF8;
+	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	padding: 9px 14px;
+	width: 100%;
+	text-align: center;
+}
+
+.item-window-info1-title-text {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 32px;
+	line-height: 33px;
+	color: #4F000B;
+}
+
+.item-window-image-main {
+	display:flex;
+  justify-content:center;
+	border: 1px solid black;
+	height: 45vh;
+}
+
+.item-window-image-main-image {
+ object-fit: contain;
+}
+
+.item-window-info1-description, .item-window-info1-specs, .item-window-info1-condition {
+	display: flex;
+	flex-direction: column;
+	margin-top: 20px;
+	background: #FFFBF8;
+	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	padding: 9px 14px;
+	width: 100%;
+}
+
+.item-window-info1-specs {
+	width: 35%;
+}
+
+.item-window-info1-condition {
+	width: 60%;
+	margin-left: 5%;
+}
+
+.item-window-info1-description-text-title {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 24px;
+	line-height: 20px;
+	color: #4F000B;
+	margin-bottom: 15px;
+}
+
+.item-window-info1-description-text {
+	font-family: Yanone Kaffeesatz;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	line-height: 24px;
+	color: #4F000B;
+	margin-top: 15px;
+}
+
+.item-window-info1-spec-text {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	line-height: 36px;
+	color: #CE4257;
+	margin-top: 15px;
+}
+
+.item-window-info1-combine {
+	display: flex;
+	flex-direction: row;
+}
+
+.item-window-info1-spec-text2 {
+	font-family: Yanone Kaffeesatz;
+	font-style: normal;
+	font-weight: normal;
+	color: #4F000B;
+}
+
+.item-window-info2 {
+	display: flex;
+	flex-direction: column;
+	margin-left: 2%;
+	width: 15%;
+}
+
+.item-window-info2-price {
+	background: #FFFBF8;
+	box-shadow: inset 0px 0px 19px rgba(0, 0, 0, 0.3);
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 36px 14px;
+	color: #4F000B;
+}
+
+.item-window-info2-price-text {
+	font-family: Yanone Kaffeesatz;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 42px;
+}
+
+.item-window-info2-price-text2 {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 29.83px;
+	margin-top: -20px;
+}
+
+.item-window-info2-contact {
+	background: #FFFBF8;
+	box-shadow: inset 0px 0px 20px rgba(79, 0, 11, 0.4);
+	border-radius: 5px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 30px 14px;
+	margin-top: 20px;
+}
+
+.item-window-info2-contact-text {
+	font-family: Yanone Kaffeesatz;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 18px;
+	text-align: center;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: #4F000B;
+}
+
+.item-window-info2-contact-image {
+	position: absolute;
 }
 
 @media only screen and (max-width: 770px) {
@@ -1707,5 +1908,4 @@ body {
 		margin-top: 10px;
 		width: 80%;
 	}
-
 }
