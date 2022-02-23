@@ -31,7 +31,7 @@
 		<script src="js/loadMain.js"></script>
 		<script src="js/redesign.js"></script>
 	</head>
-	<body>
+	<body class="cat-body">
 		<div id="snackbar"></div>
 		<nav class="navbar navbar-expand-md navbar-dark">
 			<a class="navbar-brand" href="/knigi2"></a>
@@ -40,6 +40,8 @@
 			</button>
 			<div class="collapse navbar-collapse" id="menuLogin"></div>
 		</nav>
+		<div class="cat-bg"></div>
+		<div class="cat-bg2"></div>
 		<div class="modal fade" id="window" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
@@ -61,6 +63,21 @@
           </div>
         </div>
       </div>
+			<div class="cat-settings-container">
+					<div class="cat-sort-container">
+						<div class="cat-sort-title">
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+							<span class="cat-sort-title-text">Подреди по:</span>
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+						</div>
+						<div class="cat-sort-options">
+							<label class="b-contain"><input type="radio" id="desc" class="desc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена низходяща</span></label>
+							<label class="b-contain"><input type="radio" id="asc" class="asc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена възходяща</span></label>
+							<label class="b-contain"><input type="radio" id="new" class="new" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-нови</span></label>
+							<label class="b-contain"><input type="radio" id="popular" class="popular" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-популярни</span></label>
+						</div>
+					</div>
+			</div>
     </div>
 		<div class="footer">
 			<div class="footer-info">

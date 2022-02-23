@@ -14,39 +14,52 @@ let oldMenu =
 			<a class="nav-link" href="#" onClick="loginForm()">Вход</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link register-button" href="#" onClick="registerForm()">Регистрация</a>
+			<a class="nav-link red-button" href="#" onClick="registerForm()">Регистрация</a>
 		</li>
 	</ul>`
 
 let newMenu = 
   `<ul class="navbar-nav mr-auto" id="newMenu">
-			<li class="nav-item">
-				<a class="nav-link" href="#" onClick="">Празно</a>
-			</li>
-      <div class="dropdown nav-link">
-        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Профил
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#" onclick="viewMessages()">Съобщения</a>
-          <a class="dropdown-item" href="#" onclick="viewAccount()">Преглед на профила</a>
-          <a class="dropdown-item" href="#">Забранени купувачи</a>
-          <a class="dropdown-item" href="#" onclick="getUserItems(0)">Активни продажби</a>
-          <a class="dropdown-item" href="#" onclick="getUserItems(1)">Приключени продажби</a>
-          <a class="dropdown-item" href="#" onclick="viewPurchases()">Направени поръчки</a>
-					<a class="dropdown-item" href="#" onclick="logoutAccount()">Изход</a>
-        </div>
-      </div>
-			<li class="nav-item">
-				<a class="" href="./index.php" onClick=""><img src="assets/menulogo.png" class="logo-main"></a>
-				<img src="assets/separator-menu.png" class="separator-menu">
-			</li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" onClick="createItemForm()">Създай продажба</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Празно</a>
-      </li>
+		<div class="dropdown nav-link">
+			<button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Продавам
+			</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<a class="dropdown-item" href="#" onClick="createItemForm()">Създай оферта</a>
+				<a class="dropdown-item" href="#" onclick="getUserItems(0)">Активни оферти</a>
+				<a class="dropdown-item" href="#" onclick="getUserItems(1)">Приключили оферти</a>
+				<a class="dropdown-item" href="#">Забранени купувачи</a>
+			</div>
+		</div>
+		<div class="dropdown nav-link">
+			<button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Купувам
+			</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<a class="dropdown-item" href="#" onclick="viewPurchases()">Направени поръчки</a>
+				<a class="dropdown-item" href="#" onClick="">Запазени артикули</a>
+			</div>
+		</div>
+		<li class="nav-item">
+			<a class="" href="./index.php" onClick=""><img src="assets/menulogo.png" class="logo-main"></a>
+			<img src="assets/separator-menu.png" class="separator-menu">
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#" onclick="viewMessages()">Съобщения</a>
+		</li>
+		<div class="dropdown nav-link red-button">
+			<button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Профил
+			</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<a class="dropdown-item" href="#" onclick="viewAccount()">Преглед на профил</a>
+				<a class="dropdown-item" href="#">Забранени купувачи</a>
+				<a class="dropdown-item" href="#" onclick="getUserItems(0)">Активни продажби</a>
+				<a class="dropdown-item" href="#" onclick="getUserItems(1)">Приключени продажби</a>
+				<a class="dropdown-item" href="#" onclick="viewPurchases()">Направени поръчки</a>
+				<a class="dropdown-item" href="#" onclick="logoutAccount()">Изход</a>
+			</div>
+		</div>
   </ul>`
     
 function loginForm() {
