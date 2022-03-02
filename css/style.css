@@ -1854,6 +1854,30 @@ body {
 	z-index: -1;
 }
 
+.cat-price-container, .cat-size-container {
+	margin-top: 3%;
+	width: 20%;
+	padding: 18px 12px;
+	background: linear-gradient(79.39deg, #D6C9BE -14.67%, #FDF4EC 68.12%);
+	box-shadow: inset 0px 0px 50px rgba(141, 114, 114, 0.5);
+	border-radius: 2px;
+}
+
+
+.irs--big .irs-bar {
+	background: linear-gradient(92.07deg, #CE4257 0%, #FF7F51 104.11%)!important;
+	border: 0 solid black!important;
+}
+
+.irs--big .irs-handle {
+	background: white!important;
+	border: 5px solid #CE4257!important;
+}
+
+.irs--big .irs-single {
+	background: linear-gradient(92.07deg, #CE4257 0%, #FF7F51 104.11%)!important;
+}
+
 @media only screen and (max-width: 770px) {
 	.logo-main, .separator-menu {
 		display: none;

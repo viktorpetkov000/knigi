@@ -19,6 +19,7 @@
 		<link rel="stylesheet" href="css/snackbar.css">
 		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 		<link rel="stylesheet" href="css/style.css">		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
 		<script src="https://code.iconify.design/2/2.0.4/iconify.min.js"></script>
 		<script src="js/jquery.js"></script>
 		<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
@@ -29,7 +30,8 @@
 		<script src="js/main.js"></script>
 		<script src="js/message.js"></script>
 		<script src="js/loadMain.js"></script>
-		<script src="js/redesign.js"></script>
+		<script src="js/categories.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
 	</head>
 	<body class="cat-body">
 		<div id="snackbar"></div>
@@ -64,19 +66,35 @@
         </div>
       </div>
 			<div class="cat-settings-container">
-					<div class="cat-sort-container">
-						<div class="cat-sort-title">
-							<img src="./assets/lines.png" class="cat-sort-title-img">
-							<span class="cat-sort-title-text">Подреди по:</span>
-							<img src="./assets/lines.png" class="cat-sort-title-img">
-						</div>
-						<div class="cat-sort-options">
-							<label class="b-contain"><input type="radio" id="desc" class="desc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена низходяща</span></label>
-							<label class="b-contain"><input type="radio" id="asc" class="asc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена възходяща</span></label>
-							<label class="b-contain"><input type="radio" id="new" class="new" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-нови</span></label>
-							<label class="b-contain"><input type="radio" id="popular" class="popular" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-популярни</span></label>
-						</div>
+				<div class="cat-sort-container">
+					<div class="cat-sort-title">
+						<img src="./assets/lines.png" class="cat-sort-title-img">
+						<span class="cat-sort-title-text">Подреди по:</span>
+						<img src="./assets/lines.png" class="cat-sort-title-img">
 					</div>
+					<div class="cat-sort-options">
+						<label class="b-contain"><input type="radio" id="desc" class="desc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена низходяща</span></label>
+						<label class="b-contain"><input type="radio" id="asc" class="asc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена възходяща</span></label>
+						<label class="b-contain"><input type="radio" id="new" class="new" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-нови</span></label>
+						<label class="b-contain"><input type="radio" id="popular" class="popular" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-популярни</span></label>
+					</div>
+				</div>
+			</div>
+			<div class="cat-price-container">
+				<div class="cat-sort-title">
+					<img src="./assets/lines.png" class="cat-sort-title-img">
+					<span class="cat-sort-title-text">Цена:</span>
+					<img src="./assets/lines.png" class="cat-sort-title-img">
+				</div>
+				<input type="text" class="js-range-slider-price" name="my_range" value=""/>
+			</div>
+			<div class="cat-size-container">
+				<div class="cat-sort-title">
+					<img src="./assets/lines.png" class="cat-sort-title-img">
+					<span class="cat-sort-title-text">Обем:</span>
+					<img src="./assets/lines.png" class="cat-sort-title-img">
+				</div>
+				<input type="text" class="js-range-slider-size" name="my_range" value=""/>
 			</div>
     </div>
 		<div class="footer">
