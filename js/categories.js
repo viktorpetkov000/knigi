@@ -46,7 +46,7 @@ function loadTopArticles(id, image, title, price) {
 //   <span class="cat-main-item-location"></span>
 //   <img src="./assets/time.png" class="cat-main-item-icon">
 //   <span class="cat-main-item-time"></span>
-// </div>
+// </di
 // <span class="cat-main-item-description"></span>
 // <div class="cat-main-item-price-container">
 //   <span class="cat-main-item-price">35.90</span><br>
