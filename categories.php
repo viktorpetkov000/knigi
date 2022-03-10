@@ -34,6 +34,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
 	</head>
 	<body class="cat-body">
+		<div class="cat-bg"></div>
+		<div class="cat-bg2"></div>
 		<div id="snackbar"></div>
 		<nav class="navbar navbar-expand-md navbar-dark">
 			<a class="navbar-brand" href="/knigi2"></a>
@@ -42,8 +44,6 @@
 			</button>
 			<div class="collapse navbar-collapse" id="menuLogin"></div>
 		</nav>
-		<div class="cat-bg"></div>
-		<div class="cat-bg2"></div>
 		<div class="modal fade" id="window" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
@@ -51,6 +51,13 @@
 						<h4 id="windowTitle"></h4>
 					</div>
 					<div class="modal-body" id="windowForm"></div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="item-window" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered item-window-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-body" id="item-window-form"></div>
 				</div>
 			</div>
 		</div>
@@ -65,38 +72,118 @@
           </div>
         </div>
       </div>
-			<div class="cat-settings-container">
-				<div class="cat-sort-container">
-					<div class="cat-sort-title">
-						<img src="./assets/lines.png" class="cat-sort-title-img">
-						<span class="cat-sort-title-text">Подреди по:</span>
-						<img src="./assets/lines.png" class="cat-sort-title-img">
+			<div class="cat-container">
+				<div class="cat-settings-container">
+					<div class="cat-sort-container">
+						<div class="cat-sort-title">
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+							<span class="cat-sort-title-text">Подреди по:</span>
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+						</div>
+						<div class="cat-sort-options">
+							<label class="b-contain"><input type="radio" id="desc" class="desc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена низходяща</span></label>
+							<label class="b-contain"><input type="radio" id="asc" class="asc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена възходяща</span></label>
+							<label class="b-contain"><input type="radio" id="new" class="new" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-нови</span></label>
+							<label class="b-contain"><input type="radio" id="popular" class="popular" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-популярни</span></label>
+						</div>
 					</div>
-					<div class="cat-sort-options">
-						<label class="b-contain"><input type="radio" id="desc" class="desc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена низходяща</span></label>
-						<label class="b-contain"><input type="radio" id="asc" class="asc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена възходяща</span></label>
-						<label class="b-contain"><input type="radio" id="new" class="new" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-нови</span></label>
-						<label class="b-contain"><input type="radio" id="popular" class="popular" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-популярни</span></label>
+					<div class="cat-price-container">
+						<div class="cat-sort-title">
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+							<span class="cat-sort-title-text">Цена:</span>
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+						</div>
+						<input type="text" class="js-range-slider-price" name="my_range" value=""/>
+					</div>
+					<div class="cat-size-container">
+						<div class="cat-sort-title">
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+							<span class="cat-sort-title-text">Обем:</span>
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+						</div>
+						<input type="text" class="js-range-slider-size" name="my_range" value=""/>
+					</div>
+					<div class="cat-year-container">
+						<div class="cat-sort-title">
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+							<span class="cat-sort-title-text">Период на издаване:</span>
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+						</div>
+						<label class="b-contain"><input type="checkbox" name="checkbox-year-1" value="1"><div class="b-input"></div><span class="cat-sort-option-text">1800-1900 г.</span></span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-year-2" value="2"><div class="b-input"></div><span class="cat-sort-option-text">1901-1915 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-year-3" value="3"><div class="b-input"></div><span class="cat-sort-option-text">1916-1939 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-year-4" value="4"><div class="b-input"></div><span class="cat-sort-option-text">1940-1950 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-year-5" value="5"><div class="b-input"></div><span class="cat-sort-option-text">1951-1970 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-year-6" value="6"><div class="b-input"></div><span class="cat-sort-option-text">1971-2000 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-year-7" value="7"><div class="b-input"></div><span class="cat-sort-option-text">Съвременни</span></label>
+					</div>
+					<div class="cat-subcat-container">
+						<div class="cat-sort-title">
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+							<span class="cat-sort-title-text">Други категории:</span>
+							<img src="./assets/lines.png" class="cat-sort-title-img">
+						</div>
+						<label class="b-contain"><input type="checkbox" name="checkbox-cat-1" value="1"><div class="b-input"></div><span class="cat-sort-option-text">1800-1900 г.</span></span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-cat-2" value="2"><div class="b-input"></div><span class="cat-sort-option-text">1901-1915 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-cat-3" value="3"><div class="b-input"></div><span class="cat-sort-option-text">1916-1939 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-cat-4" value="4"><div class="b-input"></div><span class="cat-sort-option-text">1940-1950 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-cat-5" value="5"><div class="b-input"></div><span class="cat-sort-option-text">1951-1970 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-cat-6" value="6"><div class="b-input"></div><span class="cat-sort-option-text">1971-2000 г.</span></label>
+						<label class="b-contain"><input type="checkbox" name="checkbox-cat-7" value="7"><div class="b-input"></div><span class="cat-sort-option-text">Съвременни</span></label>
+					</div>
+				</div>
+				<div class="cat-main-container">
+					<div class="cat-top-articles-outer">
+						<div class="cat-top-articles-inner">
+							<div class="cat-top-articles-image-container">
+								<img src="./assets/stars.png" class="cat-top-articles-image"/>
+								<span class="cat-top-articles-text">ТОП АРТИКУЛИ</span>
+							</div>
+							<div class="cat-top-articles-inner2">
+							</div>
+						</div>
+						<div class="cat-top-articles">
+						</div>
+					</div>
+					<div class="cat-main-separator"></div>
+					<div class="cat-main-pages">
+					</div>
+					<div class="cat-main-items">
+						<div class="cat-main-item">
+							<div class="cat-main-item-slider"></div>
+							<div class="cat-main-item-middle">
+								<span class="cat-main-item-title">Мед и мляко - Иван Вазон 1905 г.</span>
+								<div class="cat-main-item-info-segment2">
+									<div class="cat-main-item-info">
+										<div class="cat-main-item-info-segment">
+											<img src="./assets/userpic.png" class="cat-main-item-icon">
+											<span class="cat-main-item-username">Venko_Milinkov85</span>
+										</div>
+										<div class="cat-main-item-info-segment">
+											<img src="./assets/location.png" class="cat-main-item-icon">
+											<span class="cat-main-item-location">Павликени</span>
+										</div>
+										<div class="cat-main-item-info-segment">
+											<img src="./assets/time.png" class="cat-main-item-icon">
+											<span class="cat-main-item-time">Днес 05:50</span>
+										</div>
+									</div>
+									<span class="cat-main-item-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis auctor tincidunt dignissim dictumst integer ac. Lorem ipsum dolor sit amet, consectetur adipiscing elit ...</span>
+								</div>
+							</div>
+							<div class="cat-main-item-price-container">
+								<span class="cat-main-item-price">35.90</span>
+								<span class="cat-main-item-price-bgn">BGN</span>
+								<div class="cat-main-item-open-button" onclick="viewItem(id)">
+									<img src="./assets/magnifier.png" class="cat-main-item-open-image"></span>
+									<span class="cat-main-item-open-text">отвори</span>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="cat-price-container">
-				<div class="cat-sort-title">
-					<img src="./assets/lines.png" class="cat-sort-title-img">
-					<span class="cat-sort-title-text">Цена:</span>
-					<img src="./assets/lines.png" class="cat-sort-title-img">
-				</div>
-				<input type="text" class="js-range-slider-price" name="my_range" value=""/>
-			</div>
-			<div class="cat-size-container">
-				<div class="cat-sort-title">
-					<img src="./assets/lines.png" class="cat-sort-title-img">
-					<span class="cat-sort-title-text">Обем:</span>
-					<img src="./assets/lines.png" class="cat-sort-title-img">
-				</div>
-				<input type="text" class="js-range-slider-size" name="my_range" value=""/>
-			</div>
-    </div>
+		</div>
 		<div class="footer">
 			<div class="footer-info">
 				<div class="footer-logo">
