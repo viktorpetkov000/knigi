@@ -5,11 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-<<<<<<< HEAD
-=======
 		<title>Книги</title>
-		<title>Книги</title>
->>>>>>> 3cdbfff3693a23f206c38994df72f81113b78003
 		<meta charset="UTF-8">
 		<meta name="description" content="Купувай и продавай - онлайн">
 		<meta name="keywords" content="Книги, knigi, books">
