@@ -5,7 +5,6 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Книги</title>
 		<meta charset="UTF-8">
 		<meta name="description" content="Купувай и продавай - онлайн">
 		<meta name="keywords" content="Книги, knigi, books">
