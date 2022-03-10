@@ -5,7 +5,11 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+<<<<<<< HEAD
 		<title>Книги</title>
+=======
+		<meta charset="UTF-8">
+>>>>>>> 1385da0e65783aabd458df2350af629b6da461d1
 		<meta name="description" content="Купувай и продавай - онлайн">
 		<meta name="keywords" content="Книги, knigi, books">
 		<meta name="author" content="Viktor Petkov">
