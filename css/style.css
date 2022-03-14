@@ -800,6 +800,18 @@ body {
 	border: 2px solid #E2A9AD;
 }
 
+.category-menu .cat-item {
+	margin-left: 2.5%;
+}
+
+.cat-item-first {
+	margin-left: 0!important;
+}
+
+.category-menu a {
+	display: contents;
+}
+
 .cat-item {
 	transition: all 0.2s ease-in-out;
 	position: relative;
@@ -869,11 +881,6 @@ body {
 
 .cat-item:hover .cat-line {
 	content: url("../assets/line-hover.png")
-}
-
-
-.cat-item:not(:first-child) {
-	margin-left: 2.5%;
 }
 
 .cat-icon {
@@ -2161,6 +2168,12 @@ body {
 	letter-spacing: 0.05em;
 	color: #4F000B;
 }
+
+.cat-main-item {
+	margin-top: 5%;
+}
+
+
 
 @media only screen and (max-width: 770px) {
 	.logo-main, .separator-menu {

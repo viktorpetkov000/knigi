@@ -340,7 +340,6 @@ function createItem() {
 		success: function(result) {
 			showMessage(result);
 			if (result == "Успешно създаване.") {
-				loadItemList();
 				$('#window').modal('hide');
 			}
 		},

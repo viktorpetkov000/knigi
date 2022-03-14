@@ -17,7 +17,7 @@
 	$query_success = false;
 
 	date_default_timezone_set('Europe/Sofia');
-	$date = date("Y-m-d h:i:sa");
+	$date = date("Y/m/d - h:i");
 	if (isset($_POST['title']))
 		$title = $_POST['title'];
 	if (isset($_POST['author']))
@@ -43,6 +43,8 @@
 				$file_count = count($_FILES['files']['name']);
 				$files_arr = array();
 				for ($i = 0; $i < $file_count; $i++) {
+					$prefix = uniqid("img_");
+					$_FILES['files']['name'][$i] = $prefix.$_FILES['files']['name'][$i];
 					$file = $_FILES['files']['name'][$i];
 					$file_temp = $_FILES['files']['tmp_name'][$i];
 					$file_size = $_FILES["files"]["size"][$i];
