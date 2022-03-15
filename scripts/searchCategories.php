@@ -3,6 +3,7 @@
   include('./db.php');
 	$items = [];
 	$page = 0;
+	$images = [];
 	if (isset($_POST['page']))
 		$page = intval($_POST['page']);
 	$limithigh = 6;
@@ -15,20 +16,26 @@
 		$query = "SELECT * FROM `items` WHERE ";
 		if (isset($_POST['category'])) {
 			$category = $_POST['category'];
-			$query = "SELECT * FROM `items` INNER JOIN accounts ON items.uid = accounts.uid WHERE items.category = '$category' AND items.ended = 0 ORDER BY items.id DESC LIMIT $limitlow, $limithigh;";
+			$query = "SELECT items.title, accounts.username, items.price, items.descr, items.startdate, items.id FROM `items`
+			INNER JOIN accounts ON items.uid = accounts.uid
+			WHERE items.category = '$category' AND items.ended = 0 ORDER BY items.id DESC LIMIT $limitlow, $limithigh;";
 		}
 
 		if (isset($_POST['subCategory'])) {
 			$category = $_POST['category'];
 			$subcategory = $_POST['subCategory'];
-			$query = "SELECT * FROM `items` WHERE category = '$category' AND subcategory = '$subcategory' AND ended = 0 ORDER BY id DESC LIMIT $limitlow, $limithigh; ";
+			$query = "SELECT items.title, accounts.username, items.price, items.descr, items.startdate, items.id FROM `items`
+			INNER JOIN accounts ON items.uid = accounts.uid
+			WHERE category = '$category' AND subcategory = '$subcategory' AND ended = 0 ORDER BY id DESC LIMIT $limitlow, $limithigh; ";
 		}
 
 		if (isset($_POST['subCategory2'])) {
 			$category = $_POST['category'];
 			$subcategory = $_POST['subCategory'];
 			$subcategory2 = $_POST['subCategory2'];
-			$query = "SELECT * FROM `items` WHERE category = '$category' AND subcategory = '$subcategory' AND subcategory2 = '$subcategory2' AND ended = 0 ORDER BY id DESC LIMIT $limitlow, $limithigh;";
+			$query = "SELECT items.title, accounts.username, items.price, items.descr, items.startdate, items.id FROM `items`
+			INNER JOIN accounts ON items.uid = accounts.uid
+			WHERE category = '$category' AND subcategory = '$subcategory' AND subcategory2 = '$subcategory2' AND ended = 0 ORDER BY id DESC LIMIT $limitlow, $limithigh;";
 		}
 
 		$result = mysqli_query($conn,$query) or die(mysqli_error($conn));

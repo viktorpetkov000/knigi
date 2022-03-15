@@ -24,7 +24,7 @@ function viewItem(id) {
 						</div>
 						<div class="item-window-cat">
 							<img src="./assets/cat-1.png" class="item-window-cat-button"/>
-							<span class="item-window-topbar-text item-window-topbar-text-cat">Категория</span>
+							<span class="item-window-topbar-text item-window-topbar-text-cat">` + categories.main[result.items[0].category] + " / " + categories.sub[result.items[0].category][result.items[0].subcategory] + " / " + categories.sub2[result.items[0].category][result.items[0].subcategory][result.items[0].subcategory2] + `</span>
 						</div>
 					</div>
 					<div class="item-window-row">

@@ -118,6 +118,8 @@
 							<span class="cat-sort-title-text">Подкатегории</span>
 							<img src="./assets/lines.png" class="cat-sort-title-img">
 						</div>
+						<div class="cat-subcat-list">
+						</div>
 					</div>
 				</div>
 				<div class="cat-main-container">
