@@ -2195,6 +2195,10 @@ body {
 	object-fit: contain;
 }
 
+.nav-link, .nav-main, .dropdown-item {
+	cursor: pointer;
+}
+
 @media only screen and (max-width: 770px) {
 	.logo-main, .separator-menu {
 		display: none;

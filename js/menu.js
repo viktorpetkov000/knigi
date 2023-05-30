@@ -1,20 +1,20 @@
 let oldMenu =
 	`<ul class="navbar-nav mr-auto">
 		<li class="nav-item">
-			<a class="nav-link" href="./contacts.php" onClick="">Контакти</a>
+			<a class="nav-link" href="./contacts.php">Контакти</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="./about.php" onClick="">За платформата</a>
+			<a class="nav-link" href="./about.php">За платформата</a>
 		</li>
 		<li class="nav-item">
-			<a class="" href="./index.php"><img src="assets/menulogo.png" class="logo-main"></a>
+			<a class="" href="./"><img src="assets/menulogo.png" class="logo-main"></a>
 			<img src="assets/separator-menu.png" class="separator-menu">
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="#" onClick="loginForm()">Вход</a>
+			<a class="nav-link" id="nav-login">Вход</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link red-button" href="#" onClick="registerForm()">Регистрация</a>
+			<a class="nav-link red-button" id="nav-register">Регистрация</a>
 		</li>
 	</ul>`
 
@@ -25,10 +25,10 @@ let newMenu =
 				Продавам
 			</button>
 			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				<a class="dropdown-item" href="#" onClick="createItemForm()">Създай оферта</a>
-				<a class="dropdown-item" href="#" onclick="getUserItems(0)">Активни оферти</a>
-				<a class="dropdown-item" href="#" onclick="getUserItems(1)">Приключили оферти</a>
-				<a class="dropdown-item" href="#">Забранени купувачи</a>
+				<a class="dropdown-item" id="drop-create">Създай оферта</a>
+				<a class="dropdown-item" id="drop-active">Активни оферти</a>
+				<a class="dropdown-item" id="drop-inactive">Приключили оферти</a>
+				<a class="dropdown-item" id="drop-forbidden">Забранени купувачи</a>
 			</div>
 		</div>
 		<div class="dropdown nav-link">
@@ -36,100 +36,31 @@ let newMenu =
 				Купувам
 			</button>
 			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				<a class="dropdown-item" href="#" onclick="viewPurchases()">Направени поръчки</a>
-				<a class="dropdown-item" href="#" onClick="">Запазени артикули</a>
+				<a class="dropdown-item" id="drop-viewpurchase">Направени поръчки</a>
+				<a class="dropdown-item" id="drop-saved">Запазени артикули</a>
 			</div>
 		</div>
 		<li class="nav-item">
-			<a class="" href="./index.php" onClick=""><img src="assets/menulogo.png" class="logo-main"></a>
+			<a class="" href="./index.php"><img src="assets/menulogo.png" class="logo-main"></a>
 			<img src="assets/separator-menu.png" class="separator-menu">
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="#" onclick="viewMessages()">Съобщения</a>
+			<a class="nav-link" href="./messages.php">Съобщения</a>
 		</li>
 		<div class="dropdown nav-link red-button">
 			<button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				Профил
 			</button>
 			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				<a class="dropdown-item" href="#" onclick="viewAccount()">Преглед на профил</a>
-				<a class="dropdown-item" href="#">Забранени купувачи</a>
-				<a class="dropdown-item" href="#" onclick="getUserItems(0)">Активни продажби</a>
-				<a class="dropdown-item" href="#" onclick="getUserItems(1)">Приключени продажби</a>
-				<a class="dropdown-item" href="#" onclick="viewPurchases()">Направени поръчки</a>
-				<a class="dropdown-item" href="#" onclick="logoutAccount()">Изход</a>
+				<a class="dropdown-item" id="drop-viewaccount">Преглед на профил</a>
+				<a class="dropdown-item" id="drop-forbidden">Забранени купувачи</a>
+				<a class="dropdown-item" id="drop-active">Активни продажби</a>
+				<a class="dropdown-item" id="drop-inactive">Приключени продажби</a>
+				<a class="dropdown-item" id="drop-viewpurchase">Направени поръчки</a>
+				<a class="dropdown-item" id="drop-logout">Изход</a>
 			</div>
 		</div>
   </ul>`
-    
-function loginForm() {
-	$("#windowTitle").html("Вход");
-	$("#windowForm").html(
-			`<div class="d-flex flex-column text-center">
-				<form id="loginForm">
-					<div class="form-group">
-						<input type="email" class="form-control input-1" id="logEmail" placeholder="Имейл адрес..." required>
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control input-1" id="logPassword" placeholder="Парола..." required>
-					</div>
-					<button type="button" id="logButton" class="btn btn-info btn-block btn-round button-red" onClick="loginAccount()">Вход</button>
-					<button type="button" class="btn btn-info btn-block btn-round button-gray" onClick="$('#window').modal('hide');">Назад</button>
-				</form>
-			</div>`
-	);
-	$('#loginForm').trigger("reset");
-	$('#window').modal('show');
-}
-
-function loginAccount() {
-	let formData = new FormData();
-	formData.append('email', $('#logEmail').val())
-	formData.append('password', $('#logPassword').val())
-	$.ajax({
-		type: "POST",
-		url: 'scripts/login.php',
-		cache: false,
-		contentType: false,
-		processData: false,
-		data: formData,
-		success: function(result) {
-			showMessage(result);
-			if (result == "Успешен вход.")
-				loadAccount();
-		},
-	});
-}
-
-function registerForm() {
-	$("#windowTitle").html("Регистрация на профил");
-	$("#windowForm").html(
-		`<div class="d-flex flex-column text-center">
-				<form id="registrationForm">
-					<div class="form-group">
-						<input type="text" class="form-control input-1" id="regUsername"placeholder="Потребителско име..." required>
-					</div>
-					<div class="form-group">
-						<input type="email" class="form-control input-1" id="regEmail"placeholder="Имейл адрес..." required>
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control input-1" id="regPassword" placeholder="Парола..." required>
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control input-1" id="regPasswordC" placeholder="Повторете паролата..." required>
-					</div>
-					<div class="form-group terms">
-						<label for="termsConfirm" id="termsText">Съгласен съм с<a href="terms.php" id="terms-link" target="_blank">общите условия за ползване</a></label>
-						<label class="b-contain"><input type="checkbox" id="termsConfirm" name="termsConfirm" required><div class="b-input"></div></label>
-					</div>
-					<button type="button" id="regButton" class="btn btn-info btn-block btn-round button-red" onClick="registerAccount()">Регистрация</button>
-					<button type="button" class="btn btn-info btn-block btn-round button-gray" onClick="$('#window').modal('hide');">Назад</button>
-				</form>
-			</div>`
-	);
-	$('#registrationForm').trigger("reset");
-	$('#window').modal('show');
-}
 
 function registerAccount() {
 	let formData = new FormData();
@@ -222,58 +153,6 @@ let categories = {
 	]
 }
 
-function createItemForm() {
-	let catList = ``
-	for (let i = 0; i < categories.main.length; i++)
-		catList += `<option value="` + i + `">` + categories.main[i] + `</option>`;
-	$("#windowTitle").html("Създаване на продажба");
-	$("#windowForm").html(
-		`<div class="d-flex flex-column text-center">
-				<form id="itemForm">
-					<div class="form-group">
-						<input type="text" class="form-control input-1" id="itemTitle"placeholder="Заглавие..." required>
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control input-1" id="itemAuthor"placeholder="Автор...">
-					</div>
-					<div class="form-group">
-						<textarea class="form-control input-1" id="itemDescr" placeholder="Описание..."></textarea>
-					</div>
-					<div class="form-group">
-						<div class="row" id="groupCurr">
-							<input type="number" min="0" class="form-control input-1" id="itemPrice" placeholder="Цена..." required>
-							<span id="itemCurr">лв</span>
-						</div>
-					</div>
-					<div class="form-group" id="conditionGroup">
-						<select class="form-control input-1" id="itemCondition" onChange="">
-							<option selected disabled>Състояние</option>
-							<option value="1">Ново</option>
-							<option value="2">Отлично</option>
-							<option value="3">Много Добро</option>
-							<option value="4">Добро</option>
-							<option value="5">Лошо</option>
-						</select>
-					</div>
-					<div class="form-group" id="categoryGroup">
-						<select class="form-control input-1" id="itemCategory" onChange="loadSubCategories1()">
-							<option selected disabled>Категория</option>
-							` + catList + `
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="exampleFormControlFile1">Изображения</label>
-						<input type="file" class="form-control-file input-1" id="itemImage" multiple required/>
-					</div>
-					<button type="button" class="btn btn-info btn-block btn-round button-red" onClick="createItem()">Създаване</button>
-					<button type="button" class="btn btn-info btn-block btn-round button-gray" onClick="$('#window').modal('hide');">Назад</button>
-				</form>
-			</div>`
-	);
-	$('#itemForm').trigger("reset");
-	$('#window').modal('show');
-}
-
 function loadSubCategories1() {
 	if ($("#subCategory1Group").length)
 		$("#subCategory1Group").remove();
@@ -350,74 +229,16 @@ function viewMessages() {
 	window.location.href = 'messages.php';
 }
 
-function viewAccount() {
-	$.ajax({
-		type: "POST",
-		url: 'scripts/getCurrentUser.php',
-		cache: false,
-		contentType: false,
-		processData: false,
-		dataType: 'json',
-		data: {},
-		success: function(result) {
-			if (result) {
-				window.location.href = 'account.php?uid='+result;
-			}
-		},
-	});
-}
-
-function viewPurchases(page) {
-	let formData = new FormData();
-	if (page)
-		formData.append('page', page);
-	else
-		page = 0;
-	$.ajax({
-		type: "POST",
-		url: 'scripts/getPurchases.php',
-		cache: false,
-		contentType: false,
-		processData: false,
-		dataType: 'json',
-		data: formData,
-		success: function(result) {
-			if (result) {
-				let table =
-				`<div class="container">       
-					<table class="table">
-						<thead>
-							<tr>
-								<th>Заглавие</th>
-								<th>Цена</th>
-							</tr>
-						</thead>
-						<tbody id="itemTable">
-						</tbody>
-					</table>
-					<div id="pages">
-						<i class="fas fa-arrow-left" onclick="viewPurchases(` + (parseInt(page)-1) + `)"></i>
-						<span id="page">Страница ` + (parseInt(page)+1) + `</span>
-						<i class="fas fa-arrow-right" onclick="viewPurchases(` + (parseInt(page)+1) + `)"></i>
-					</div>
-				</div>`
-				$("#window").modal('show');
-				$("#windowTitle").html("Направени поръчки");
-				$("#windowForm").html(table);
-				for (let i = 0; i < result.data.length; i++)
-					loadPurchases(result.data[i].id, result.data[i].title, result.data[i].price);
-			}
-		},
-	});
-}
-
 function loadPurchases(id, title, price) {
 	let item =
-	`<tr onClick="viewPurchase('`+ id +`')">
+	`<tr id="load-purchases">
 		<td>` + title + `</td>
 		<td>` + price + `лв</td>
 	</tr>`
 	$("#itemTable").append(item);
+	$(document).on('click','#load-purchases', function(){
+		viewPurchase(id)
+	});
 }
 
 function viewPurchase(id) {
@@ -434,18 +255,24 @@ function viewPurchase(id) {
 		success: function(result) {
 			if (result) {
 				$("#windowForm").html(
-					`<i class="fas fa-arrow-left" id="back" onclick="viewPurchases()"></i>
+					`<i class="fas fa-arrow-left" id="back"></i>
 					<div class="d-flex flex-column text-center" id="addButton">
 						<img src="files/` + result.items[0].image + `" class="item-large-image">
 						<div class="item-large-price">` + result.items[0].price + `лв</div>
 						<div class="item-large-descr">` + result.items[0].descr + `</div>
 					</div>`);
 					if (result.items[0].rating == 0) 
-						$("#addButton").append(`<button type="button" id="removeButton" class="btn btn-info btn-block btn-round" onClick="confirmRating(` + id + `)">Остави рейтинг</button>`)
+						$("#addButton").append(`<button type="button" id="removeButton" class="btn btn-info btn-block btn-round">Остави рейтинг</button>`)
 				$("#window").modal('show');
 				$("#windowTitle").html(result.items[0].title);
 			}
 		},
+	});
+	$(document).on('click','#back', function(){
+		viewPurchases();
+	});
+	$(document).on('click','#removeButton', function(){
+		confirmRating(id);
 	});
 }
 
@@ -552,6 +379,246 @@ $(function() {
 		}
 	});
 
+	$(document).on('click','#nav-login', function(){
+		loginForm();
+	});
+
+	$(document).on('click','#nav-register', function(){
+		registerForm();
+	});
+
+	$(document).on('click','#drop-create', function(){
+		createItemForm();
+	});
+
+	$(document).on('click','#drop-active', function(){
+		getUserItems(0);
+	});
+
+	$(document).on('click','#drop-inactive', function(){
+		getUserItems(1);
+	});
+
+	$(document).on('click','#drop-forbidden', function(){
+		getUserItems(1);
+	});
+
+	$(document).on('click','#drop-viewpurchase', function(){
+		viewPurchases();
+	});
+
+	$(document).on('click','#drop-logout', function(){
+		logoutAccount();
+	});
+
+	$(document).on('click','#drop-viewaccount', function(){
+		viewAccount();
+	});
+
+	$(document).on('click','#drop-saved', function(){
+		viewSaved();
+	});
+
+	$(document).on('click','#logButton', function(){
+		loginAccount();
+	});
+
+	$(document).on('click','#hide-windowk', function(){
+		$('#window').modal('hide');
+	});
+
+	$(document).on('click','#regButton', function(){
+		registerAccount();
+	});
+
+	$(document).on('click','#create-item-button', function(){
+		createItem();
+	});
+	
+	$()
+
   $("#menuLogin").html(oldMenu);
   loadAccount();
+
+	function loginForm() {
+		$("#windowTitle").html("Вход");
+		$("#windowForm").html(
+				`<div class="d-flex flex-column text-center">
+					<form id="loginForm">
+						<div class="form-group">
+							<input type="email" class="form-control input-1" id="logEmail" placeholder="Имейл адрес..." required>
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-1" id="logPassword" placeholder="Парола..." required>
+						</div>
+						<button type="button" id="logButton" class="btn btn-info btn-block btn-round button-red">Вход</button>
+						<button type="button" id="hide-window" class="btn btn-info btn-block btn-round button-gray">Назад</button>
+					</form>
+				</div>`
+		);
+		$('#loginForm').trigger("reset");
+		$('#window').modal('show');
+	}
+
+	function registerForm() {
+		$("#windowTitle").html("Регистрация на профил");
+		$("#windowForm").html(
+			`<div class="d-flex flex-column text-center">
+					<form id="registrationForm">
+						<div class="form-group">
+							<input type="text" class="form-control input-1" id="regUsername"placeholder="Потребителско име..." required>
+						</div>
+						<div class="form-group">
+							<input type="email" class="form-control input-1" id="regEmail"placeholder="Имейл адрес..." required>
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-1" id="regPassword" placeholder="Парола..." required>
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-1" id="regPasswordC" placeholder="Повторете паролата..." required>
+						</div>
+						<div class="form-group terms">
+							<label for="termsConfirm" id="termsText">Съгласен съм с<a href="terms.php" id="terms-link" target="_blank">общите условия за ползване</a></label>
+							<label class="b-contain"><input type="checkbox" id="termsConfirm" name="termsConfirm" required><div class="b-input"></div></label>
+						</div>
+						<button type="button" id="regButton" class="btn btn-info btn-block btn-round button-red">Регистрация</button>
+						<button type="button" id="hide-window" class="btn btn-info btn-block btn-round button-gray">Назад</button>
+					</form>
+				</div>`
+		);
+		$('#registrationForm').trigger("reset");
+		$('#window').modal('show');
+	}
+
+	function createItemForm() {
+		let catList = ``
+		for (let i = 0; i < categories.main.length; i++)
+			catList += `<option value="` + i + `">` + categories.main[i] + `</option>`;
+		$("#windowTitle").html("Създаване на продажба");
+		$("#windowForm").html(
+			`<div class="d-flex flex-column text-center">
+					<form id="itemForm">
+						<div class="form-group">
+							<input type="text" class="form-control input-1" id="itemTitle"placeholder="Заглавие..." required>
+						</div>
+						<div class="form-group">
+							<input type="text" class="form-control input-1" id="itemAuthor"placeholder="Автор...">
+						</div>
+						<div class="form-group">
+							<textarea class="form-control input-1" id="itemDescr" placeholder="Описание..."></textarea>
+						</div>
+						<div class="form-group">
+							<div class="row" id="groupCurr">
+								<input type="number" min="0" class="form-control input-1" id="itemPrice" placeholder="Цена..." required>
+								<span id="itemCurr">лв</span>
+							</div>
+						</div>
+						<div class="form-group" id="conditionGroup">
+							<select class="form-control input-1" id="itemCondition" onChange="">
+								<option selected disabled>Състояние</option>
+								<option value="1">Ново</option>
+								<option value="2">Отлично</option>
+								<option value="3">Много Добро</option>
+								<option value="4">Добро</option>
+								<option value="5">Лошо</option>
+							</select>
+						</div>
+						<div class="form-group" id="categoryGroup">
+							<select class="form-control input-1" id="itemCategory" onChange="loadSubCategories1()">
+								<option selected disabled>Категория</option>
+								` + catList + `
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleFormControlFile1">Изображения</label>
+							<input type="file" class="form-control-file input-1" id="itemImage" multiple required/>
+						</div>
+						<button type="button" id="create-item-button" class="btn btn-info btn-block btn-round button-red">Създаване</button>
+						<button type="button" id="hide-window" class="btn btn-info btn-block btn-round button-gray">Назад</button>
+					</form>
+				</div>`
+		);
+		$('#itemForm').trigger("reset");
+		$('#window').modal('show');
+	}
+
+	function viewPurchases(page) {
+		let formData = new FormData();
+		if (page)
+			formData.append('page', page);
+		else
+			page = 0;
+		$.ajax({
+			type: "POST",
+			url: 'scripts/getPurchases.php',
+			cache: false,
+			contentType: false,
+			processData: false,
+			dataType: 'json',
+			data: formData,
+			success: function(result) {
+				if (result) {
+					let table =
+					`<div class="container">       
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Заглавие</th>
+									<th>Цена</th>
+								</tr>
+							</thead>
+							<tbody id="itemTable">
+							</tbody>
+						</table>
+						<div id="pages">
+							<i class="fas fa-arrow-left" onclick="viewPurchases(` + (parseInt(page)-1) + `)"></i>
+							<span id="page">Страница ` + (parseInt(page)+1) + `</span>
+							<i class="fas fa-arrow-right" onclick="viewPurchases(` + (parseInt(page)+1) + `)"></i>
+						</div>
+					</div>`
+					$("#window").modal('show');
+					$("#windowTitle").html("Направени поръчки");
+					$("#windowForm").html(table);
+					for (let i = 0; i < result.data.length; i++)
+						loadPurchases(result.data[i].id, result.data[i].title, result.data[i].price);
+				}
+			},
+		});
+	}
+
+	function viewAccount() {
+		$.ajax({
+			type: "POST",
+			url: 'scripts/getCurrentUser.php',
+			cache: false,
+			contentType: false,
+			processData: false,
+			dataType: 'json',
+			data: {},
+			success: function(result) {
+				if (result) {
+					window.location.href = 'account.php?uid='+result;
+				}
+			},
+		});
+	}
+
+	function loginAccount() {
+		let formData = new FormData();
+		formData.append('email', $('#logEmail').val())
+		formData.append('password', $('#logPassword').val())
+		$.ajax({
+			type: "POST",
+			url: 'scripts/login.php',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: formData,
+			success: function(result) {
+				showMessage(result);
+				if (result == "Успешен вход.")
+					loadAccount();
+			},
+		});
+	}
 });
