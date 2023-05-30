@@ -1,6 +1,12 @@
 <?php
-	include('templates/default.php');
+	session_start();
+	include('scripts/db.php');
 ?>
+<!DOCTYPE html>
+<html lang="en">
+	<?php include('template/head.php')?>
+	<body>
+		<?php include('template/header.php')?>
 		<div class="main-container">
 			<div class="category-container">
 				<div class="category-menu">
@@ -73,6 +79,6 @@
 				</div>
 			</div>
 		</div>
-		<?php include "templates/footer.php"; ?>
+		<?php include "template/footer.php"; ?>
 	</body>
 </html>

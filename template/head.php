@@ -1,10 +1,4 @@
-<?php
-	session_start();
-	include('scripts/db.php');
-?>
-<!DOCTYPE html>
-<html lang="en">
-	<head>
+<head>
 		<title>Книги</title>
 		<meta charset="UTF-8">
 		<meta name="description" content="Купувай и продавай - онлайн">
@@ -30,23 +24,3 @@
 		<script src="js/homepage.js"></script>
 		<script src="js/main.js"></script>
 	</head>
-	<body>
-		<div id="snackbar"></div>
-		<?php include('header.php')?>
-		<div class="modal fade" id="window" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 id="windowTitle"></h4>
-					</div>
-					<div class="modal-body" id="windowForm"></div>
-				</div>
-			</div>
-		</div>
-		<div class="modal fade" id="item-window" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered item-window-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-body" id="item-window-form"></div>
-				</div>
-			</div>
-		</div>
