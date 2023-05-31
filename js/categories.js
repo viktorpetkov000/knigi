@@ -1,6 +1,5 @@
+let items = 0;
 $(function() {
-  let items = 0;
-
   function getTopArticles() {
     $.ajax({
       type: "POST",

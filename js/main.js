@@ -80,7 +80,7 @@ function viewItem(id) {
 					</div>
 				</div>
 				`);
-				var $carouselWindow = $('.carousel-window').flickity({
+				let $carouselWindow = $('.carousel-window').flickity({
 					initialIndex: 0,
 					wrapAround: false,
 					cellSelector: '.item-window-image-cell'
@@ -139,11 +139,7 @@ function viewItem(id) {
 				$( ".item-window-return" ).click(function() {
 					$('#item-window').modal('toggle');
 				});
-				let timer = setTimeout(resize, 200);
-				function resize() {
-					$carouselWindow.flickity('resize')
-					clearTimeout(timer);
-				}
+
       } else showMessage("Няма такава продажба.");
     },
 	});
