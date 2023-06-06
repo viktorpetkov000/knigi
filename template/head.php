@@ -29,4 +29,5 @@
 		<script src="js/message.js"></script>
 		<script src="js/homepage.js"></script>
 		<script src="js/main.js"></script>
+		<script src="https://www.paypal.com/sdk/js?client-id=ASofUOgdidgZLkwlm1IUXwLyBJGurKzMcbAHiW_5hlUUkUCI7SQmMMJXQzrvCyGc9dhBcDbr255p1-wD&disable-funding=credit,card&currency=EUR"></script>
 	</head>

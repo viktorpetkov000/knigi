@@ -1,6 +1,7 @@
 function viewItem(id) {
   formData = new FormData;
   formData.append('id', id);
+	console.log(id)
 	$.ajax({
 		type: "POST",
 		url: 'scripts/getItem.php',
@@ -67,8 +68,9 @@ function viewItem(id) {
 						<div class="item-window-info2">
 							<div class="item-window-info2-price">
 								<span class="item-window-info2-price-text">35.90</span>
-								<span class="item-window-info2-price-text2">BGN</span>
+								<span class="item-window-info2-price-text2">EUR</span>
 							</div>
+							<div id="paypal-payment-button"></div>
 							<div class="item-window-info2-contact">
 								<span class="item-window-info2-contact-text">СВЪРЖИ СЕ С ТЪРГОВЕЦА</span>
 								<img src="./assets/contact.png" class="item-window-info2-contact-image"/>
@@ -80,6 +82,33 @@ function viewItem(id) {
 					</div>
 				</div>
 				`);
+
+				paypal.Buttons({
+					style : {
+							color: 'blue',
+							shape: 'pill',
+							height: 35,
+					},
+					createOrder: function (data, actions) {
+							return actions.order.create({
+									purchase_units : [{
+											amount: {
+													value: result.items[0].price
+											}
+									}]
+							});
+					},
+					onApprove: function (data, actions) {
+							return actions.order.capture().then(function (details) {
+									console.log(details)
+									window.location.replace("http://localhost:8080/success.php")
+							})
+					},
+					onCancel: function (data) {
+							window.location.replace("http://localhost:8080/Oncancel.php")
+					}
+				}).render('#paypal-payment-button');
+
 				let $carouselWindow = $('.carousel-window').flickity({
 					initialIndex: 0,
 					wrapAround: false,
@@ -139,7 +168,11 @@ function viewItem(id) {
 				$( ".item-window-return" ).click(function() {
 					$('#item-window').modal('toggle');
 				});
-
+				let timer = setTimeout(resize, 200);
+				function resize() {
+					$('.carousel-window').flickity('resize')
+					clearTimeout(timer);
+				}
       } else showMessage("Няма такава продажба.");
     },
 	});

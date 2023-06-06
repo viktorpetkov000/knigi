@@ -25,16 +25,17 @@ $(function() {
 			wrapAround: true
 		});
 		let item =
-		`<div id="latest-article-view" class="carousel-cell">
+		`<div id="latest-article-view" class="carousel-cell carousel-cell-` + id + `">
 			<div class="new-item-container-inner">
 				<img class="new-item-image" src="files/` + image + `">
 				<div class="new-item-title">` + title + `</div>
-				<div class="new-item-price">` + price + `<span class="bgn">` + " BGN"+ `</span></div>
+				<div class="new-item-price">` + price + `<span class="bgn">` + " EUR"+ `</span></div>
 			</div>
 		</div>`
 		$carousel.flickity( 'append', $(item));
 		$carousel.flickity( 'select', 4);
-		$(document).on('click','#latest-article-view', function(){
+		$(document).off('click','.carousel-cell-' + id);
+		$(document).on('click','.carousel-cell-' + id, function(){
       viewItem(id);
     });
 	}

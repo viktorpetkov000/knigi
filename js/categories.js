@@ -28,59 +28,17 @@ $(function() {
       wrapAround: false,
     });
     let item =
-    `<div id="top-article-view" class="carousel-cell">
+    `<div id="top-article-view" class="carousel-cell carousel-cell-` + id + `">
       <div class="new-item-container-inner">
         <img class="new-item-image" src="files/` + image + `">
         <div class="new-item-title">` + title + `</div>
-        <div class="new-item-price">` + price + `<span class="bgn">` + " BGN"+ `</span></div>
+        <div class="new-item-price">` + price + `<span class="bgn">` + " EUR"+ `</span></div>
       </div>
     </div>`
     $carousel.flickity( 'append', $(item));
     $carousel.flickity( 'select', 0);
-    $(document).on('click','#top-article-view', function(){
-      viewItem(id);
-    });
-  }
-  
-  
-  function getArticles() {
-    $.ajax({
-      type: "POST",
-      url: 'scripts/getLatestItems.php',
-      cache: false,
-      contentType: false,
-      processData: false,
-      dataType: 'json',
-      data: [],
-      success: function(result) {
-        if (result) {
-          for (let i = 0; i < result.items.length; i++) {
-            loadTopArticles(result.items[i].id, result.items[i].image, result.items[i].title, result.items[i].price);
-          }
-        } else
-          showMessage("Няма открити резултати.");
-          $(".cat-main-items").html("");
-      },
-    });
-  }
-  
-  function loadArticles(id, image, title, price) {
-    var $carousel = $('.cat-top-articles').flickity({
-      initialIndex: 1,
-      pageDots: false,
-      wrapAround: false,
-    });
-    let item =
-    `<div id="article-view" class="carousel-cell">
-      <div class="new-item-container-inner">
-        <img class="new-item-image" src="files/` + image + `">
-        <div class="new-item-title">` + title + `</div>
-        <div class="new-item-price">` + price + `<span class="bgn">` + " BGN"+ `</span></div>
-      </div>
-    </div>`
-    $carousel.flickity( 'append', $(item));
-    $carousel.flickity( 'select', 0);
-    $(document).on('click','#article-view', function(){
+    $(document).off('click','#top-article-view .carousel-cell-' + id)
+    $(document).on('click','#top-article-view .carousel-cell-' + id, function(){
       viewItem(id);
     });
   }
@@ -132,13 +90,14 @@ $(function() {
                   </div>
                   <div class="cat-main-item-price-container">
                     <span class="cat-main-item-price">` + result.items[i].price + `</span>
-                    <span class="cat-main-item-price-bgn">BGN</span>
+                    <span class="cat-main-item-price-bgn">EUR</span>
                     <div id="cat-item-view-` + result.items[i].id + `" class="cat-main-item-open-button">
                       <img src="./assets/magnifier.png" class="cat-main-item-open-image"></span>
                       <span class="cat-main-item-open-text">отвори</span>
                     </div>
                   </div>
                 </div>`);
+                $(document).off('click','#cat-item-view-' + result.items[i].id);
                 $(document).on('click','#cat-item-view-' + result.items[i].id, function(){
                   viewItem(result.items[i].id);
                 });
@@ -175,6 +134,7 @@ $(function() {
             window.history.replaceState(null, null, "?cat=" + id + "&page=" + result.page + "");
             for (let i = 0; i < categories.sub[id].length; i++) {
               subCategories += `<label class="b-contain"><input type="radio" name="radio-cat" id="sub-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub[id][i] + `</span></span></label>`;
+              $(document).off('click','#sub-' + i)
               $(document).on('click','#sub-' + i, function(){
                 searchSubCategories(i,id,0);
               });
@@ -237,7 +197,7 @@ $(function() {
                   </div>
                   <div class="cat-main-item-price-container">
                     <span class="cat-main-item-price">` + result.items[i].price + `</span>
-                    <span class="cat-main-item-price-bgn">BGN</span>
+                    <span class="cat-main-item-price-bgn">EUR</span>
                     <div id="cat-sub-item-view-` + result.items[i].id + `" class="cat-main-item-open-button">
                       <img src="./assets/magnifier.png" class="cat-main-item-open-image"></span>
                       <span class="cat-main-item-open-text">отвори</span>
@@ -245,6 +205,7 @@ $(function() {
                   </div>
                 </div>`);
                 let fixid = result.items[i].id;
+                $(document).off('click','#cat-sub-item-view-' + result.items[i].id)
                 $(document).on('click','#cat-sub-item-view-' + result.items[i].id, function(){
                   viewItem(fixid);
                 });
@@ -280,6 +241,7 @@ $(function() {
             window.history.replaceState(null, null, "?cat=" + mainId +"&subcat=" + id + "&page=" + result.page + "");
             for (let i = 0; i < categories.sub2[mainId][id].length; i++) {
               subCategories2 += `<label class="b-contain"><input type="radio" name="radio-cat-2" id="sub2-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub2[mainId][id][i] + `</span></span></label>`;
+              $(document).off('click','#sub2-' + i)
               $(document).on('click','#sub2-' + i, function(){
                 searchSubCategories2(i,id,mainId,0);
               });
@@ -342,7 +304,7 @@ $(function() {
                   </div>
                   <div class="cat-main-item-price-container">
                     <span class="cat-main-item-price">` + result.items[i].price + `</span>
-                    <span class="cat-main-item-price-bgn">BGN</span>
+                    <span class="cat-main-item-price-bgn">EUR</span>
                     <div id="cat-sub2-item-view-` + result.items[i].id + `" class="cat-main-item-open-button">
                       <img src="./assets/magnifier.png" class="cat-main-item-open-image"></span>
                       <span class="cat-main-item-open-text">отвори</span>
@@ -350,6 +312,7 @@ $(function() {
                   </div>
                 </div>`);
               let fixid2 = result.items[i].id;
+              $(document).off('click','#cat-sub2-item-view-' + result.items[i].id)
               $(document).on('click','#cat-sub2-item-view-' + result.items[i].id, function(){
                 viewItem(fixid2);
               });
@@ -420,7 +383,7 @@ $(function() {
       let subCategories = '';
       for (let i = 0; i < categories.sub[getUrlParameter('cat')].length; i++) {
         subCategories += `<label class="b-contain"><input type="radio" name="radio-cat" id="sub-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub[getUrlParameter('cat')][i] + `</span></span></label>`;
-        $(document).off('#sub-' + i);
+        $(document).off('click','#sub-' + i);
         $(document).on('click','#sub-' + i, function(){
           searchSubCategories(i,getUrlParameter('cat'),0)
         });
@@ -430,7 +393,7 @@ $(function() {
       let subCategories2 = '';
       for (let i = 0; i < categories.sub2[getUrlParameter('cat')][getUrlParameter('subcat')].length; i++) {
         subCategories2 += `<label class="b-contain"><input type="radio" name="radio-cat-2" id="sub2-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub2[getUrlParameter('cat')][getUrlParameter('subcat')][i] + `</span></span></label>`;
-        $(document).off('#sub2-' + i);
+        $(document).off('click','#sub2-' + i);
         $(document).on('click','#sub2-' + i, function(){
           searchSubCategories2(i,getUrlParameter('subcat'),getUrlParameter('cat'),0)
         });
@@ -443,7 +406,7 @@ $(function() {
       let subCategories = '';
       for (let i = 0; i < categories.sub[getUrlParameter('cat')].length; i++) {
         subCategories += `<label class="b-contain"><input type="radio" name="radio-cat" id="sub-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub[getUrlParameter('cat')][i] + `</span></span></label>`;
-        $(document).off('#sub-' + i);
+        $(document).off('click','#sub-' + i);
         $(document).on('click','#sub-' + i, function(){
           searchSubCategories(i,getUrlParameter('cat'),0)
         });
