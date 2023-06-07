@@ -81,6 +81,9 @@ function viewItem(id) {
 					</div>
 				</div>
 				`);
+				let itemPrice = result.items[0].price;
+				let itemId = result.items[0].id;
+				let itemUid = result.items[0].uid;
 				$.ajax({
 					type: "POST",
 					url: 'scripts/session.php',
@@ -98,14 +101,14 @@ function viewItem(id) {
 									height: 35,
 								},
 								createOrder: function (data, actions) {
-								return actions.order.create({
-									purchase_units : [{
-											amount: {
-												value: result.items[0].price
-											}
-										}]
-									});
-								},
+									return actions.order.create({
+										purchase_units : [{
+												amount: {
+													value: itemPrice
+												}
+											}]
+										});
+									},
 								onApprove: function (data, actions) {
 									return actions.order.capture().then(function (details) {
 										$("#item-window-form").html(`
@@ -114,9 +117,12 @@ function viewItem(id) {
 											</div>
 										`);
 										formData = new FormData;
-										formData.append('iid', result.items[0].id);
-										formData.append('sid', result.items[0].uid);
-										formData.append(details);
+										formData.append('iid', itemId);
+										formData.append('sid', itemUid);
+										formData.append('paypal_id', details.id);
+										formData.append('paypal_email', details.payer.email_address);
+										formData.append('paypal_user_id', details.payer.payer_id);
+										formData.append('paypal_date', details.create_time);
 										$.ajax({
 											type: "POST",
 											url: 'scripts/purchase.php',
@@ -134,6 +140,7 @@ function viewItem(id) {
 													showMessage("Тази продажба е приключила.");
 												else if (result == 4) {
 													showMessage("Успешна поръчка.");
+													getLatest();
 													//contactSeller($("#item-page-user").attr("sid"));
 												}
 												else if (result == 5)
@@ -145,11 +152,7 @@ function viewItem(id) {
 									})
 								},
 								onCancel: function (data) {
-									$("#item-window-form").html(`
-										<div>
-											<span>Неуспешно направена поръчка. Натиснете <a href="#" id="close-payment-href">Тук</a> за да затворите прозореца.</span>
-										</div>
-									`);
+									showMessage("Неуспешно направена поръчка");
 								}
 							}).render('#paypal-payment-button');
 						}
@@ -223,42 +226,42 @@ function viewItem(id) {
       } else showMessage("Няма такава продажба.");
     },
 	});
+}
 
-	function notifyBuyerPurchase(sid) {
-		let formData = new FormData();
-		formData.append('receivedby', sid);
-		formData.append('message', "Закупих вашата продажба - " + $("#item-page-title").html());
-		$.ajax({
-			type: "POST",
-			url: 'scripts/sendMessage.php',
-			cache: false,
-			contentType: false,
-			processData: false,
-			dataType: 'json',
-			data: formData,
-			success: function(result) {
-				if (result)
-					window.location.href = 'messages.php?cid='+sid;
-			},
-		});
-	}
+function notifyBuyerPurchase(sid) {
+	let formData = new FormData();
+	formData.append('receivedby', sid);
+	formData.append('message', "Закупих вашата продажба - " + $("#item-page-title").html());
+	$.ajax({
+		type: "POST",
+		url: 'scripts/sendMessage.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result)
+				window.location.href = 'messages.php?cid='+sid;
+		},
+	});
+}
 
-	function contactSeller(sid) {
-		let formData = new FormData();
-		formData.append('receivedby', sid);
-		formData.append('message', "Закупих вашата продажба - " + $("#item-page-title").html());
-		$.ajax({
-			type: "POST",
-			url: 'scripts/sendMessage.php',
-			cache: false,
-			contentType: false,
-			processData: false,
-			dataType: 'json',
-			data: formData,
-			success: function(result) {
-				if (result)
-					window.location.href = 'messages.php?cid='+sid;
-			},
-		});
-	}
+function contactSeller(sid) {
+	let formData = new FormData();
+	formData.append('receivedby', sid);
+	formData.append('message', "Закупих вашата продажба - " + $("#item-page-title").html());
+	$.ajax({
+		type: "POST",
+		url: 'scripts/sendMessage.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result)
+				window.location.href = 'messages.php?cid='+sid;
+		},
+	});
 }

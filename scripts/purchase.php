@@ -14,6 +14,14 @@
     $uid = $_SESSION['uid'];
   if (isset($_POST['sid']));
     $sid = $_POST['sid'];
+  if (isset($_POST['paypal_id']))
+    $paypal_id = $_POST['paypal_id'];
+  if (isset($_POST['paypal_email']))
+    $paypal_email = $_POST['paypal_email'];
+  if (isset($_POST['paypal_user_id']));
+    $paypal_user_id = $_POST['paypal_user_id'];
+  if (isset($_POST['paypal_date']))
+    $paypal_date = $_POST['paypal_date'];
 
   if ($uid) {
     if ($iid) {
@@ -21,8 +29,8 @@
         $query = "UPDATE items SET ended=1, buyerid='$uid', enddate='$date' WHERE id = '$iid' AND ended = 0 AND uid = '$sid'";
         $result = mysqli_query($conn,$query) or die(mysqli_error($conn));
         if (mysqli_affected_rows($conn)) {
-          // $insertPurchase = "INSERT INTO payments(`username`,`email`,`password`,`salt`,`code`,`tax`) VALUES('$username','$email','$newPassword', '$salt', '$hash', 12)";
-          // $insertPurchaseStatus = mysqli_query($conn,$insertUser) or die(mysqli_error($conn));
+          $insertPurchase = "INSERT INTO payments(`item_id`,`paypal_id`,`paypal_email`,`paypal_user_id`,`paypal_date`) VALUES('$iid','$paypal_id','$paypal_email', '$paypal_user_id', '$paypal_date')";
+          $insertPurchaseStatus = mysqli_query($conn,$insertPurchase) or die(mysqli_error($conn));
           echo json_encode("4");
           // $query = "SELECT price FROM `items` WHERE id = '$iid'";
           // $result = mysqli_query($conn,$query) or die(mysqli_error($conn));
