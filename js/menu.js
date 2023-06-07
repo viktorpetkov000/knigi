@@ -799,6 +799,15 @@ $(function() {
 	$(document).on('click','#create-item-button', function(){
 		createItem();
 	});
+
+	$(document).on('click','#open-orders-href', function(){
+		$("#item-window").modal('hide');
+		viewPurchases();
+	});
+
+	$(document).on('click','#close-payment-href', function(){
+		$("#item-window").modal('hide');
+	});
 	
 	$()
 

@@ -67,7 +67,6 @@ $(function() {
                 let count = 0;
                 let contact = "";
                 for (i = 0; i < result.data.length; i++) {
-                  console.log(result.data);
                   contact =
                   `<div id="message-contact-` + result.data[i].uid + `" class="contact btn btn-info btn-block btn-round">
                     ` + result.data[i].username + `
