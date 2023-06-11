@@ -112,7 +112,11 @@ $(function() {
 				<img src="assets/separator-menu.png" class="separator-menu">
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="./messages.php">Съобщения</a>
+				<a class="nav-link" href="./messages.php">Съобщения
+				<div id="message-notification-bubble">
+					<span id="message-notification-number">1</span>
+				</div>
+				</a>
 			</li>
 			<div class="dropdown nav-link red-button">
 				<button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

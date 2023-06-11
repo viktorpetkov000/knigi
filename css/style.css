@@ -369,7 +369,7 @@ body {
 	font-family: Yanone Kaffeesatz;
 	font-style: normal;
 	font-weight: normal;
-	font-size: 15px;
+	font-size: 17px;
 	line-height: 18px;
 	text-align: center;
 	letter-spacing: 0.05em;
@@ -382,6 +382,7 @@ body {
 	margin-left: 35px;
 	margin-right: 35px;
 	margin-top: 35px;
+	position: relative;
 }
 
 .modal-open .main-container {
@@ -726,26 +727,43 @@ body {
 
 #account-page-rates-container {
 	width: 100%
-
 }
 
-#account-page-rates-title {
+#account-page-rates-title, #account-page-details-title {
 	padding-bottom: 5px;
 	border-bottom: 3px solid #FFCB39;
 	margin-bottom: 12px;
 	font-weight: bold;
 	margin-top: 50px;
+	width: 100%;
+}
+
+#account-page-container {
+	margin-bottom: 35px;
+}
+
+#account-page-details-container {
+	width: 100%;
+	float: right;
 }
 
 #account-page-rates {
+	width: 100%;
+}
+
+#account-page-rates, #account-page-details {
 	border: 2px solid #c2c2c272;
 	border-top: none;
 	padding: 15px 20px 0px 20px;
-	border-radius: 10px;	
+	border-radius: 10px;
 }
 
 #account-page-rates a {
 	color: #545454;
+}
+
+#account-page-details-phone {
+	margin-top: 10px;
 }
 
 #page {
@@ -1241,7 +1259,7 @@ body {
 	border: none;
 	background: none;
 	font-family: Yanone Kaffeesatz;
-	font-size: 15px;
+	font-size: 17px;
 	line-height: 13px;
 	text-align: center;
 	letter-spacing: 0.05em;
@@ -1254,7 +1272,7 @@ body {
 
 .dropdown-item {
 	font-family: Yanone Kaffeesatz;
-	font-size: 16px;
+	font-size: 17px;
 	letter-spacing: 0.05em;
 	color: #4F000B!important;
 }
@@ -2202,6 +2220,19 @@ body {
 #paypal-payment-button {
 	margin-top: 17%;
 	width: 100%;
+}
+
+#message-notification-bubble {
+	position: absolute;
+	width: 15%;
+	right: 5px;
+	top: 5px;
+	margin-top: -15px;
+	background-image: linear-gradient(to right, #CE4257 , #FF7F51);
+	border-radius: 100px;
+	padding: 4px;
+	color: #FFF9F3!important;
+	display: none;
 }
 
 @media only screen and (max-width: 770px) {

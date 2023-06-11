@@ -1,5 +1,6 @@
 let refresher;
 let contacts = [];
+let notifications = 0;
 
 $(function() {
   $(document).on('keypress','#controls',function(e){
@@ -10,7 +11,9 @@ $(function() {
 	});
   
   getContacts();
+  checkNotifications();
   setInterval(receiveMessage, 60000);
+  setInterval(checkNotifications, 60000);
   if (getUrlParameter('cid'))
     getMessages(getUrlParameter('cid'));
 
@@ -74,6 +77,7 @@ $(function() {
                   let fixuid = result.data[i].uid;
                   $(document).on('click','#message-contact-' + fixuid, function(){
                     getMessages(fixuid);
+                    checkNotifications();
                   });
                   contacts.push(contact);
                   count++;
@@ -218,6 +222,7 @@ $(function() {
           for (i = 0; i < result.new.length; i++)
             if ($("#send-message-button").attr("contact") != result.new[i].sentby)
               users.push(result.new[i].sentby);
+          // notifications += result.new.length;
           let formData = new FormData();
           formData.append('uid', users);
           $.ajax({
@@ -229,11 +234,39 @@ $(function() {
             dataType: 'json',
             data: formData,
             success: function(result) {
-              if (result)
+              if (result) {
+                // $("#message-notification-number").html(notifications);
+                // $("#message-notification-bubble").css("display","block");
                 showMessage("Нови съобщения от: " + result.data.map(e => e.username).join(", "));
+              }
             },
           });
         }
+      },
+    });
+  }
+
+  function checkNotifications() {
+    $.ajax({
+      type: "POST",
+      url: 'scripts/checkNotifications.php',
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: 'json',
+      data: [],
+      success: function(result) {
+        if (result) {
+          notifications = result.data[0].total;
+          $("#message-notification-number").html(notifications);
+          if (notifications > 0)
+            $("#message-notification-bubble").css("display","block");
+          else
+            $("#message-notification-bubble").css("display","none");
+        }
+      },
+      error: function(result) {
+        console.log(result);
       },
     });
   }
@@ -259,5 +292,9 @@ $(function() {
         }
       },
     });
+  }
+
+  function setMessagesRead() {
+
   }
 });

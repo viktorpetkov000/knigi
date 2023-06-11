@@ -29,6 +29,9 @@
 			while($row = $result->fetch_assoc())
 				$data[] = $row;
 			echo json_encode(['data' => $data, 'uid' => $uid]);
+			$query = "UPDATE messages SET viewed = 1 WHERE sentby = '$cid' AND receivedby = '$uid'";
+			$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
+			$count = mysqli_affected_rows($conn);
 		}
 		else
 			echo json_encode(false);
