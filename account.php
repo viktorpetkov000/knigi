@@ -1,7 +1,7 @@
 <?php
 	include('template/head.php')
 ?>
-	<script src="js/account.js"></script>
+	<script src="js/accounts.js"></script>
 	<body>
 		<?php include('template/header.php')?>
 		<div id="app">

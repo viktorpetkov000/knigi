@@ -555,172 +555,6 @@ $(function() {
 		});
 	}
 
-	function getUserItems(mode, uid, page) {
-		let formData = new FormData();
-		formData.append('mode', mode);
-		if (uid)
-			formData.append('uid', uid);
-		if (page)
-			formData.append('page', page);
-		else
-			page = 0;
-		$.ajax({
-			type: "POST",
-			url: 'scripts/getUserItems.php',
-			cache: false,
-			contentType: false,
-			processData: false,
-			dataType: 'json',
-			data: formData,
-			success: function(result) {
-				if (result) {
-					let title = "";
-					if (mode)
-						title = "Неактивни продажби";
-					else
-						title = "Активни продажби";
-					let table =
-					`<div class="container">       
-						<table class="table">
-							<thead>
-								<tr>
-									<th>Заглавие</th>
-									<th>Цена</th>
-								</tr>
-							</thead>
-							<tbody id="itemTable">
-							</tbody>
-						</table>
-						<div id="pages">
-							<i id="user-items-left" class="fas fa-arrow-left"></i>
-							<span id="page">Страница ` + (parseInt(page)+1) + `</span>
-							<i id="user-items-right" class="fas fa-arrow-right"></i>
-						</div>
-					</div>`
-					$("#window").modal('show');
-					$("#windowTitle").html(title);
-					$("#windowForm").html(table);
-					$(document).off('click','#user-items-left')
-					$(document).off('click','#user-items-right')
-					$(document).on('click','#user-items-left', function(){
-						getUserItems(mode,$(".navbar-brand").attr("user"),(parseInt(page)-1));
-					});
-					$(document).on('click','#user-items-right', function(){
-						getUserItems(mode,$(".navbar-brand").attr("user"),(parseInt(page)+1));
-					});
-					for (let i = 0; i < result.items.length; i++)
-						loadItemTable(result.items[i].id, result.items[i].title, result.items[i].price);
-				} else {
-					showMessage("Няма открити резултати.");
-				}
-			},
-		});
-	}
-
-	function loadItemTable(id, title, price) {
-		let item =
-		`<tr class="item-table-` + id + `">
-			<td>` + title + `</td>
-			<td>` + price + `лв</td>
-		</tr>`
-		$("#itemTable").append(item);
-		$(document).off('click','.item-table-'+id);
-		$(document).on('click','.item-table-'+id, function(){
-			viewTableItem(id)
-		});
-	}
-	
-	function viewTableItem(id) {
-		let formData = new FormData();
-		formData.append('id', id);
-		$.ajax({
-			type: "POST",
-			url: 'scripts/getItem.php',
-			cache: false,
-			contentType: false,
-			processData: false,
-			dataType: 'json',
-			data: formData,
-			success: function(result) {
-				if (result) {
-					$("#windowForm").html(
-						`<i class="fas fa-arrow-left" id="item-table-back"></i>
-						<div class="d-flex flex-column text-center" id="addButton">
-							<img src="files/` + result.items[0].image + `" class="item-large-image">
-							<div class="item-large-price">` + result.items[0].price + `лв</div>
-							<div class="item-large-descr">` + result.items[0].descr + `</div>
-						</div>`);
-						if (result.items[0].ended == 0 && $(".navbar-brand").attr('user',) == result.items[0].uid)
-							$("#addButton").append(`<button type="button" id="removeButton" class="item-table-remove-button-` + id + ` btn btn-info btn-block btn-round">Премахни продажбата</button>`)
-					$("#window").modal('show');
-					$("#windowTitle").html(result.items[0].title);
-					$(document).off('click','#item-table-back');
-					$(document).off('click','.item-table-remove-button-' + id);
-					$(document).on('click','#item-table-back', function(){
-						getUserItems(result.items[0].ended,result.items[0].uid);
-					});
-					$(document).on('click','.item-table-remove-button-' + id, function(){
-						removeItemConfirm(id);
-					});
-				}
-			},
-		});
-	}
-
-	function removeItem(id) {
-		let formData = new FormData();
-		formData.append('id', id);
-		$.ajax({
-			type: "POST",
-			url: 'scripts/removeItem.php',
-			cache: false,
-			contentType: false,
-			processData: false,
-			dataType: 'json',
-			data: formData,
-			success: function(result) {
-				if (result == 1)
-					showMessage("Моля влезте в профила си.");
-				else if (result == 2)
-					showMessage("Невалидна продажба.");
-				else if (result == 3)
-					showMessage("Тази продажба е приключила.");
-				else if (result == 4) {
-					showMessage("Успешно прекратяване на продажба.")
-					$("#confirm").remove();
-				}
-			},
-		});
-	}
-	
-	function removeItemConfirm(id) {
-		$("#removeButton").remove();
-		$("#addButton").append(
-				`<div class="d-flex text-center" id="confirm">
-						<button type="button" id="removeButton-confirm" class="btn btn-info btn-block btn-round" style="margin-top: 9px">Потвърди премахване</button>
-						<button type="button" id="cancel-remove-item-button" class="btn btn-info btn-block btn-round" style="margin-top: 9px">Отказ</button>
-				</div>`
-		);
-		$('#window').modal('show');
-		$(document).off('click','#removeButton-confirm');
-		$(document).off('click','#cancel-remove-item-button');
-		$(document).on('click','#removeButton-confirm', function(){
-			removeItem(id)
-		});
-		$(document).on('click','#cancel-remove-item-button', function(){
-			cancelRemoveItem(id)
-		});
-	}
-	
-	function cancelRemoveItem(id) {
-		$("#confirm").remove();
-		$("#addButton").append(`<button type="button" id="removeButton-cancel" class="btn btn-info btn-block btn-round">Премахни продажбата</button>`)
-		$(document).off('click','#removeButton-cancel');
-		$(document).on('click','#removeButton-cancel', function(){
-			removeItemConfirm(id);
-		});
-	}
-
 	function validateEmail(email) {
 		if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
 			return true;
@@ -769,7 +603,7 @@ $(function() {
 	});
 
 	$(document).on('click','#drop-forbidden', function(){
-		getUserItems(1);
+		getUserItems(2);
 	});
 
 	$(document).on('click','#drop-viewpurchase', function(){
@@ -818,3 +652,169 @@ $(function() {
   $("#menuLogin").html(oldMenu);
   loadAccount();
 });
+
+function getUserItems(mode, uid, page) {
+	let formData = new FormData();
+	formData.append('mode', mode);
+	if (uid)
+		formData.append('uid', uid);
+	if (page)
+		formData.append('page', page);
+	else
+		page = 0;
+	$.ajax({
+		type: "POST",
+		url: 'scripts/getUserItems.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result) {
+				let title = "";
+				if (mode == 1)
+					title = "Приключени продажби";
+				else if (mode == 0)
+					title = "Активни продажби";
+				let table =
+				`<div class="container">       
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Заглавие</th>
+								<th>Цена</th>
+							</tr>
+						</thead>
+						<tbody id="itemTable">
+						</tbody>
+					</table>
+					<div id="pages">
+						<i id="user-items-left" class="fas fa-arrow-left"></i>
+						<span id="page">Страница ` + (parseInt(page)+1) + `</span>
+						<i id="user-items-right" class="fas fa-arrow-right"></i>
+					</div>
+				</div>`
+				$("#window").modal('show');
+				$("#windowTitle").html(title);
+				$("#windowForm").html(table);
+				$(document).off('click','#user-items-left')
+				$(document).off('click','#user-items-right')
+				$(document).on('click','#user-items-left', function(){
+					getUserItems(mode,$(".navbar-brand").attr("user"),(parseInt(page)-1));
+				});
+				$(document).on('click','#user-items-right', function(){
+					getUserItems(mode,$(".navbar-brand").attr("user"),(parseInt(page)+1));
+				});
+				for (let i = 0; i < result.items.length; i++)
+					loadItemTable(result.items[i].id, result.items[i].title, result.items[i].price);
+			} else {
+				showMessage("Няма открити резултати.");
+			}
+		},
+	});
+}
+
+function loadItemTable(id, title, price) {
+	let item =
+	`<tr class="item-table-` + id + `">
+		<td>` + title + `</td>
+		<td>` + price + `лв</td>
+	</tr>`
+	$("#itemTable").append(item);
+	$(document).off('click','.item-table-'+id);
+	$(document).on('click','.item-table-'+id, function(){
+		viewTableItem(id)
+	});
+}
+
+function viewTableItem(id) {
+	let formData = new FormData();
+	formData.append('id', id);
+	$.ajax({
+		type: "POST",
+		url: 'scripts/getItem.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result) {
+				$("#windowForm").html(
+					`<i class="fas fa-arrow-left" id="item-table-back"></i>
+					<div class="d-flex flex-column text-center" id="addButton">
+						<img src="files/` + result.items[0].image + `" class="item-large-image">
+						<div class="item-large-price">` + result.items[0].price + `лв</div>
+						<div class="item-large-descr">` + result.items[0].descr + `</div>
+					</div>`);
+					if (result.items[0].ended == 0 && $(".navbar-brand").attr('user',) == result.items[0].uid)
+						$("#addButton").append(`<button type="button" id="removeButton" class="item-table-remove-button-` + id + ` btn btn-info btn-block btn-round">Премахни продажбата</button>`)
+				$("#window").modal('show');
+				$("#windowTitle").html(result.items[0].title);
+				$(document).off('click','#item-table-back');
+				$(document).off('click','.item-table-remove-button-' + id);
+				$(document).on('click','#item-table-back', function(){
+					getUserItems(result.items[0].ended,result.items[0].uid);
+				});
+				$(document).on('click','.item-table-remove-button-' + id, function(){
+					removeItemConfirm(id);
+				});
+			}
+		},
+	});
+}
+
+function removeItem(id) {
+	let formData = new FormData();
+	formData.append('id', id);
+	$.ajax({
+		type: "POST",
+		url: 'scripts/removeItem.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result == 1)
+				showMessage("Моля влезте в профила си.");
+			else if (result == 2)
+				showMessage("Невалидна продажба.");
+			else if (result == 3)
+				showMessage("Тази продажба е приключила.");
+			else if (result == 4) {
+				showMessage("Успешно прекратяване на продажба.")
+				$("#confirm").remove();
+			}
+		},
+	});
+}
+
+function removeItemConfirm(id) {
+	$("#removeButton").remove();
+	$("#addButton").append(
+			`<div class="d-flex text-center" id="confirm">
+					<button type="button" id="removeButton-confirm" class="btn btn-info btn-block btn-round" style="margin-top: 9px">Потвърди премахване</button>
+					<button type="button" id="cancel-remove-item-button" class="btn btn-info btn-block btn-round" style="margin-top: 9px">Отказ</button>
+			</div>`
+	);
+	$('#window').modal('show');
+	$(document).off('click','#removeButton-confirm');
+	$(document).off('click','#cancel-remove-item-button');
+	$(document).on('click','#removeButton-confirm', function(){
+		removeItem(id)
+	});
+	$(document).on('click','#cancel-remove-item-button', function(){
+		cancelRemoveItem(id)
+	});
+}
+
+function cancelRemoveItem(id) {
+	$("#confirm").remove();
+	$("#addButton").append(`<button type="button" id="removeButton-cancel" class="btn btn-info btn-block btn-round">Премахни продажбата</button>`)
+	$(document).off('click','#removeButton-cancel');
+	$(document).on('click','#removeButton-cancel', function(){
+		removeItemConfirm(id);
+	});
+}

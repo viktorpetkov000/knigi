@@ -27,13 +27,21 @@ function loadAccountPage() {
 		success: function(result) {
 			if (result) {
         $("#account-page-title").html('<i class="far fa-user" id="user-title"></i>' + result.data[0].username)
-        //console.log(result);
-        //$("#account-page-items-active").html(`Активни продажби: <a href='#' onclick="getUserItems(0,` + getUrlParameter('uid') + `)">` + result.data[1]["COUNT(id)"] + `</a>`);
+        $("#account-page-items-active").html(`Активни продажби: <a href='#' onclick="getUserItems(0,` + getUrlParameter('uid') + `)">` + result.data[1]["COUNT(id)"] + `</a>`);
         $("#account-page-items-ended").html(`Приключени продажби: <a href='#' onclick="getUserItems(1,` + getUrlParameter('uid') + `)">` + result.data[2]["COUNT(id)"] + `</a>`)
         let rate = ""
         let count = 0;
         let good = 0;
         let bad = 0;
+        console.log(result.data[4]);
+        if (result.data[4]) {
+          $("#account-page-details-container").css('display','block')
+          if (result.data[0].address)
+            $("#account-page-details-address").html(result.data[0].address)
+          if (result.data[0].phone)
+            $("#account-page-details-phonenumber").html(result.data[0].phone)
+        } else
+          $("#account-page-details-container").css('display','none')
         if (result.data[3]) {
           for (i = 0; i < result.data[3].length; i++) {
             count++;
@@ -112,10 +120,75 @@ function getRatingData(page) {
 	});
 }
 
+function changeDetails() {
+  let address = $("#account-page-details-address").html();
+  let phone = $("#account-page-details-phonenumber").html();
+  let changeDetailsHTML = `
+  <div id="account-page-details-container">
+    <h4 id="account-page-details-title">Промяна на детайли: </h5>
+    <div id="account-page-details">
+      <h5>Адрес на доставка:</h5>
+      <input id="account-page-details-address" class="form-control input-1" value="`+address+`" placeholder="Адрес на доставка..."></input>
+      <h5 id="account-page-details-phone">Телефонен номер:</h5>
+      <input id="account-page-details-phonenumber" class="form-control input-1" value="`+phone+`"  placeholder="Телефонен номер..."></input><br>
+      <input type="button" id="account-page-details-change-confirm" class="btn btn-info btn-block btn-round button-red" value="Запази промените"></input>
+    </div>
+  </div>`
+  $("#account-page-details-col").html(changeDetailsHTML);
+  $(document).off('click','#account-page-details-change-confirm');
+  $(document).on('click','#account-page-details-change-confirm', function(){
+		saveDetails();
+	});
+}
+
+function saveDetails() {
+  showMessage("Успешно запазване на промени.")
+  let address = $("#account-page-details-address").val();
+  let phone = $("#account-page-details-phonenumber").val();
+  let saveDetailsHTML = `
+  <div id="account-page-details-container">
+    <h4 id="account-page-details-title">Детайли: </h5>
+    <div id="account-page-details">
+      <h5>Адрес на доставка:</h5>
+      <span id="account-page-details-address">`+address+`</span>
+      <h5 id="account-page-details-phone">Телефонен номер:</h5>
+      <span id="account-page-details-phonenumber">`+phone+`</span><br>
+      <input type="button" id="account-page-details-change" class="btn btn-info btn-block btn-round button-red" value="Промени детайли"></input>
+    </div>
+  </div>`
+  let formData = new FormData();
+  formData.append('address',address);
+  formData.append('phone',phone);
+  $.ajax({
+		type: "POST",
+		url: 'scripts/changeAccountDetails.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result) {
+        if (result == 1)
+				  showMessage("Моля влезте в профила си.");
+        else if (result == 2)
+          showMessage("Не съществува такъв профил.");
+        else if (result == 3) {
+          $("#account-page-details-col").html(saveDetailsHTML);
+        }
+			}
+		},
+	});
+}
+
 function loadActiveItems() {
   getUserItems(0, 15)
 }
 
 $(function() {
   loadAccountPage();
+
+  $(document).on('click','#account-page-details-change', function(){
+		changeDetails();
+	});
 });

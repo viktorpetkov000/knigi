@@ -742,6 +742,10 @@ body {
 	margin-bottom: 35px;
 }
 
+#account-page-details-change {
+	margin-top: 15px;
+}
+
 #account-page-details-container {
 	width: 100%;
 	float: right;

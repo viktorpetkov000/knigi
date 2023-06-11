@@ -1,4 +1,5 @@
 function viewItem(id) {
+	let errorMessage = "";
   formData = new FormData;
   formData.append('id', id);
 	$.ajax({
@@ -84,6 +85,7 @@ function viewItem(id) {
 				let itemPrice = result.items[0].price;
 				let itemId = result.items[0].id;
 				let itemUid = result.items[0].uid;
+				let validationFlag = false;
 				$.ajax({
 					type: "POST",
 					url: 'scripts/session.php',
@@ -94,67 +96,90 @@ function viewItem(id) {
 					data: {},
 					success: function(result) {
 						if (result.uid > 0) {
-							paypal.Buttons({
-								style : {
-									color: 'blue',
-									shape: 'pill',
-									height: 35,
-								},
-								createOrder: function (data, actions) {
-									return actions.order.create({
-										purchase_units : [{
-												amount: {
-													value: itemPrice
-												}
-											}]
-										});
-									},
-								onApprove: function (data, actions) {
-									return actions.order.capture().then(function (details) {
-										$("#item-window-form").html(`
-											<div>
-												<span>Успешно направена поръчка! Натиснете <a href="#" id="open-orders-href">Тук</a> за да видите поръчките си.</span>
-											</div>
-										`);
-										formData = new FormData;
-										formData.append('iid', itemId);
-										formData.append('sid', itemUid);
-										formData.append('paypal_id', details.id);
-										formData.append('paypal_email', details.payer.email_address);
-										formData.append('paypal_user_id', details.payer.payer_id);
-										formData.append('paypal_date', details.create_time);
-										$.ajax({
-											type: "POST",
-											url: 'scripts/purchase.php',
-											cache: false,
-											contentType: false,
-											processData: false,
-											dataType: 'json',
-											data: formData,
-											success: function(result) {
-												if (result == 1)
-													showMessage("Моля влезте в профила си.");
-												else if (result == 2)
-													showMessage("Невалидна поръчка.");
-												else if (result == 3)
-													showMessage("Тази продажба е приключила.");
-												else if (result == 4) {
-													showMessage("Успешна поръчка.");
-													getLatest();
-													//contactSeller($("#item-page-user").attr("sid"));
-												}
-												else if (result == 5)
-													showMessage("Не може да купите собствена продажба.");
-												else
-													showMessage("Възникна проблем.");
+							formData = new FormData;
+							formData.append('iid', itemId);
+							formData.append('sid', itemUid);
+							$.ajax({
+								type: "POST",
+								url: 'scripts/validateBeforePurchase.php',
+								cache: false,
+								contentType: false,
+								processData: false,
+								dataType: 'json',
+								data: formData,
+								success: function(result) {
+									console.log(result);
+									if (result == 1)
+										errorMessage = "Моля влезте в профила си, за да направите поръчка";
+									else if (result == 2)
+										errorMessage = "Невалидна поръчка.";
+									else if (result == 3)
+										errorMessage = "Тази продажба е приключила.";
+									else if (result == 4)
+										validationFlag = true;
+									else if (result == 5)
+										errorMessage = "Не може да купите собствена продажба.";
+									else if (result == 6)
+										errorMessage = "Моля добавете адрес и телефонен номер в профилът си.";
+									else
+										errorMessage = "Възникна проблем.";
+									paypal.Buttons({
+										style : {
+											color: 'blue',
+											shape: 'pill',
+											height: 35,
+										},
+										createOrder: function (data, actions) {
+											console.log(validationFlag);
+											if (!validationFlag) {
+												showMessage(errorMessage)
+												return;
+											}
+											return actions.order.create({
+												purchase_units : [{
+														amount: {
+															value: itemPrice
+														}
+													}]
+												});
 											},
-										});
-									})
+										onApprove: function (data, actions) {
+											return actions.order.capture().then(function (details) {
+												$("#item-window-form").html(`
+													<div>
+														<span>Успешно направена поръчка! Натиснете <a href="#" id="open-orders-href">Тук</a> за да видите поръчките си.</span>
+													</div>
+												`);
+												formData = new FormData;
+												formData.append('iid', itemId);
+												formData.append('sid', itemUid);
+												formData.append('paypal_id', details.id);
+												formData.append('paypal_email', details.payer.email_address);
+												formData.append('paypal_user_id', details.payer.payer_id);
+												formData.append('paypal_date', details.create_time);
+												$.ajax({
+													type: "POST",
+													url: 'scripts/purchase.php',
+													cache: false,
+													contentType: false,
+													processData: false,
+													dataType: 'json',
+													data: formData,
+													success: function(result) {
+														if (result == 4) {
+															showMessage("Успешна поръчка.");
+															getLatest();
+														} else showMessage("Възникна проблем. Моля свържете се с нас.");
+													},
+												});
+											})
+										},
+										onCancel: function (data) {
+											showMessage("Неуспешно направена поръчка");
+										}
+									}).render('#paypal-payment-button');
 								},
-								onCancel: function (data) {
-									showMessage("Неуспешно направена поръчка");
-								}
-							}).render('#paypal-payment-button');
+							});
 						}
 					},
 				});

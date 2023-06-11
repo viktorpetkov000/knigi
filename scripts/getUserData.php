@@ -8,15 +8,18 @@
   $ratingdata = [];
   $uid = "";
   $page = 0;
+  $ownProfile = false;
   if (isset($_POST['page']))
     $page = intval($_POST['page']);
   $limithigh = 8;
   $limitlow = 8*$page;
   if (isset($_POST['uid']))
     $uid = $_POST['uid'];
+  if ($uid == $_SESSION['uid'])
+    $ownProfile = true;
 
   if ($uid) {
-    $query = "SELECT username,uid,isadmin FROM `accounts` WHERE uid = '$uid'";
+    $query = "SELECT username,uid,isadmin,address,phone FROM `accounts` WHERE uid = '$uid'";
     $result = mysqli_query($conn,$query) or die(mysqli_error($conn));
     if(mysqli_num_rows($result) > 0) {
       while($row = $result->fetch_assoc())
@@ -40,9 +43,12 @@
             while($row = $result->fetch_assoc())
               $ratingdata[] = $row;
             $data[] = $ratingdata;
+          } else {
+            $data[] = false;
           }
         }
       }
+      $data[] = $ownProfile;
       echo json_encode(['data' => $data]);
     }
     else
