@@ -60,7 +60,6 @@ $(function() {
         data: formData,
         success: function(result) {
           if (result) {
-            console.log(result);
             $(".cat-main-items").empty();
             items = 0;
             for (let i = 0; i < result.items.length; i++) {
@@ -113,7 +112,6 @@ $(function() {
                 data: formData,
                 success: function(result) {
                   if (result) {
-                    console.log(result);
                     var $itemCarousel = $('.slider-' + i).flickity({
                       initialIndex: 0,
                       wrapAround: false,
@@ -167,7 +165,6 @@ $(function() {
         data: formData,
         success: function(result) {
           if (result) {
-            console.log(result);
             $(".cat-main-items").empty();
             items = 0;
             for (let i = 0; i < result.items.length; i++) {
@@ -221,7 +218,6 @@ $(function() {
                 data: formData,
                 success: function(result) {
                   if (result) {
-                    console.log(result);
                     var $itemCarousel = $('.slider-' + i).flickity({
                       initialIndex: 0,
                       wrapAround: false,
@@ -274,7 +270,6 @@ $(function() {
         data: formData,
         success: function(result) {
           if (result) {
-            console.log(result);
             $(".cat-main-items").empty();
             items = 0;
             for (let i = 0; i < result.items.length; i++) {
@@ -328,7 +323,6 @@ $(function() {
                 data: formData,
                 success: function(result) {
                   if (result) {
-                    console.log(result);
                     var $itemCarousel = $('.slider-' + i).flickity({
                       initialIndex: 0,
                       wrapAround: false,

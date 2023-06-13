@@ -742,13 +742,28 @@ body {
 	margin-bottom: 35px;
 }
 
-#account-page-details-change {
+#account-page-details-container-sales {
+	margin-top: 20px;
+}
+
+#account-page-details-change, #account-page-details-sales-change {
 	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+#account-page-details-sales-change-confirm {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+#account-page-details-change-confirm {
+	margin-bottom: 15px;
 }
 
 #account-page-details-container {
 	width: 100%;
 	float: right;
+	margin-bottom: 15px;
 }
 
 #account-page-rates {
@@ -1279,6 +1294,7 @@ body {
 	font-size: 17px;
 	letter-spacing: 0.05em;
 	color: #4F000B!important;
+	position: relative;
 }
 
 .dropdown-item:hover {
@@ -2236,6 +2252,56 @@ body {
 	border-radius: 100px;
 	padding: 4px;
 	color: #FFF9F3!important;
+	display: none;
+}
+
+#drop-inactive {
+	position: relative;
+}
+
+#purchase-notification-bubble, #purchase-sent-notification-bubble {
+	position: absolute;
+	width: 15%;
+	right: 5px;
+	top: 5px;
+	margin-top: -15px;
+	background-image: linear-gradient(to right, #CE4257 , #FF7F51);
+	border-radius: 100px;
+	padding: 4px;
+	color: #FFF9F3!important;
+	display: none;
+}
+
+#purchase-notification-bubble-drop, #purchase-sent-notification-bubble-drop {
+	position: absolute;
+	width: 11%;
+	right: 5px;
+	top: 14px;
+	height: 100%;
+	margin-top: -15px;
+	background-image: linear-gradient(to right, #CE4257 , #FF7F51);
+	border-radius: 100px;
+	padding: 4px;
+	color: #FFF9F3!important;
+	text-align: center;
+	display: none;
+}
+
+.item-table-row {
+	position: relative;
+}
+
+.purchase-notification-bubble-item, .purchase-sent-notification-bubble-item {
+	position: absolute;
+	width: 20%;
+	right: 20px;
+	top: 22px;
+	margin-top: -15px;
+	background-image: linear-gradient(to right, #CE4257 , #FF7F51);
+	border-radius: 100px;
+	padding: 4px;
+	color: #FFF9F3!important;
+	text-align: center;
 	display: none;
 }
 

@@ -4,12 +4,10 @@
 	$uid = "";
   if (isset($_SESSION['uid']))
 		$uid = $_SESSION['uid'];
-  if (isset($_POST['address']))
-    $address = $_POST['address'];
-  if (isset($_POST['phone']))
-    $phone = $_POST['phone'];
+  if (isset($_POST['iban']))
+    $iban = $_POST['iban'];
 	if ($uid) {
-			$query = "UPDATE accounts SET address = '$address', phone = '$phone' WHERE uid = '$uid'";
+			$query = "UPDATE accounts SET iban = '$iban' WHERE uid = '$uid'";
 			$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
 			if (mysqli_affected_rows($conn))
 				echo json_encode("3");

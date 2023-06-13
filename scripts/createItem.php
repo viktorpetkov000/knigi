@@ -38,55 +38,62 @@
 		$uid = $_SESSION['uid'];
 
 	if ($uid) {
-		if ($title != "" && $descr != "" && $price != "" && $descr != "" && $condit != "") {
-			if (isset($_FILES['files'])) {
-				$file_count = count($_FILES['files']['name']);
-				$files_arr = array();
-				for ($i = 0; $i < $file_count; $i++) {
-					$prefix = uniqid("img_");
-					$_FILES['files']['name'][$i] = $prefix.$_FILES['files']['name'][$i];
-					$file = $_FILES['files']['name'][$i];
-					$file_temp = $_FILES['files']['tmp_name'][$i];
-					$file_size = $_FILES["files"]["size"][$i];
-					$target_file = $target_dir . $file;
-					$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-					if ($file_size > 250000)
-						$size_flag = true;
-					if (!($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-					&& $imageFileType != "gif"))
-						$type_flag = false;
-					if (!$size_flag) {
-						if(!$type_flag) {
-							if (move_uploaded_file($file_temp, $target_file)) {
-								$image_success = true;
-							}
-							else echo "Проблем с качването на файлът.";
-						} else echo "Позволени формати: JPG, JPEG, PNG, GIF.";
-					} else echo "Размерът на снимката трябва да е под 5MB.";
-				}
-				if ($image_success) {
-					$query = "INSERT INTO items(`title`,`author`,`price`,`descr`,`category`,`subcategory`,`subcategory2`,`condit`,`uid`,`startdate`)
-					VALUES('$title','$author','$price','$descr','$category','$subcategory','$subcategory2', '$condit', '$uid', '$date')";
-					$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
-					$query_success = true;
-				}
-				
-				if ($query_success) {
-					$id = mysqli_insert_id($conn);
+		$query = "SELECT iban FROM accounts WHERE uid = '$uid'";
+		$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
+		if(mysqli_num_rows($result) > 0)
+			while($row = $result->fetch_assoc())
+				$iban = $row["iban"];
+		if ($iban) {
+			if ($title != "" && $descr != "" && $price != "" && $descr != "" && $condit != "") {
+				if (isset($_FILES['files'])) {
+					$file_count = count($_FILES['files']['name']);
+					$files_arr = array();
 					for ($i = 0; $i < $file_count; $i++) {
+						$prefix = uniqid("img_");
+						$_FILES['files']['name'][$i] = $prefix.$_FILES['files']['name'][$i];
 						$file = $_FILES['files']['name'][$i];
-						$query = "INSERT INTO images(`iid`,`name`) VALUES('$id','$file')";
-						$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
+						$file_temp = $_FILES['files']['tmp_name'][$i];
+						$file_size = $_FILES["files"]["size"][$i];
+						$target_file = $target_dir . $file;
+						$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+						if ($file_size > 250000)
+							$size_flag = true;
+						if (!($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+						&& $imageFileType != "gif"))
+							$type_flag = false;
+						if (!$size_flag) {
+							if(!$type_flag) {
+								if (move_uploaded_file($file_temp, $target_file)) {
+									$image_success = true;
+								}
+								else echo "Проблем с качването на файлът.";
+							} else echo "Позволени формати: JPG, JPEG, PNG, GIF.";
+						} else echo "Размерът на снимката трябва да е под 5MB.";
 					}
-					if ($result) {
-						$image = $_FILES['files']['name'][0];
-						$query = "UPDATE items SET image = '$image' WHERE id = '$id'";
+					if ($image_success) {
+						$query = "INSERT INTO items(`title`,`author`,`price`,`descr`,`category`,`subcategory`,`subcategory2`,`condit`,`uid`,`startdate`)
+						VALUES('$title','$author','$price','$descr','$category','$subcategory','$subcategory2', '$condit', '$uid', '$date')";
 						$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
+						$query_success = true;
 					}
-					if ($result)
-						echo "Успешно създаване.";
-				}
-			} else echo "Не е прикачена снимка.";
-		} else echo "Моля попълнете всички полета.";
+					
+					if ($query_success) {
+						$id = mysqli_insert_id($conn);
+						for ($i = 0; $i < $file_count; $i++) {
+							$file = $_FILES['files']['name'][$i];
+							$query = "INSERT INTO images(`iid`,`name`) VALUES('$id','$file')";
+							$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
+						}
+						if ($result) {
+							$image = $_FILES['files']['name'][0];
+							$query = "UPDATE items SET image = '$image' WHERE id = '$id'";
+							$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
+						}
+						if ($result)
+							echo "Успешно създаване.";
+					}
+				} else echo "Не е прикачена снимка.";
+			} else echo "Моля попълнете всички полета.";
+		} else echo "Добавете IBAN преди да направите оферта.";
 	} else echo "Не сте влезли в профила си.";
 ?>

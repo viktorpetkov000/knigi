@@ -33,15 +33,18 @@ function loadAccountPage() {
         let count = 0;
         let good = 0;
         let bad = 0;
-        console.log(result.data[4]);
         if (result.data[4]) {
           $("#account-page-details-container").css('display','block')
           if (result.data[0].address)
             $("#account-page-details-address").html(result.data[0].address)
           if (result.data[0].phone)
             $("#account-page-details-phonenumber").html(result.data[0].phone)
-        } else
+          if (result.data[0].iban)
+            $("#account-page-details-iban").html(result.data[0].iban)
+        } else {
           $("#account-page-details-container").css('display','none')
+          $("#account-page-details-container-sales").css('display','none')
+        }
         if (result.data[3]) {
           for (i = 0; i < result.data[3].length; i++) {
             count++;
@@ -124,7 +127,6 @@ function changeDetails() {
   let address = $("#account-page-details-address").html();
   let phone = $("#account-page-details-phonenumber").html();
   let changeDetailsHTML = `
-  <div id="account-page-details-container">
     <h4 id="account-page-details-title">Промяна на детайли: </h5>
     <div id="account-page-details">
       <h5>Адрес на доставка:</h5>
@@ -132,9 +134,8 @@ function changeDetails() {
       <h5 id="account-page-details-phone">Телефонен номер:</h5>
       <input id="account-page-details-phonenumber" class="form-control input-1" value="`+phone+`"  placeholder="Телефонен номер..."></input><br>
       <input type="button" id="account-page-details-change-confirm" class="btn btn-info btn-block btn-round button-red" value="Запази промените"></input>
-    </div>
-  </div>`
-  $("#account-page-details-col").html(changeDetailsHTML);
+    </div>`
+  $("#account-page-details-container").html(changeDetailsHTML);
   $(document).off('click','#account-page-details-change-confirm');
   $(document).on('click','#account-page-details-change-confirm', function(){
 		saveDetails();
@@ -146,16 +147,14 @@ function saveDetails() {
   let address = $("#account-page-details-address").val();
   let phone = $("#account-page-details-phonenumber").val();
   let saveDetailsHTML = `
-  <div id="account-page-details-container">
-    <h4 id="account-page-details-title">Детайли: </h5>
+    <h4 id="account-page-details-title">Детайли за покупки: </h5>
     <div id="account-page-details">
       <h5>Адрес на доставка:</h5>
       <span id="account-page-details-address">`+address+`</span>
       <h5 id="account-page-details-phone">Телефонен номер:</h5>
       <span id="account-page-details-phonenumber">`+phone+`</span><br>
       <input type="button" id="account-page-details-change" class="btn btn-info btn-block btn-round button-red" value="Промени детайли"></input>
-    </div>
-  </div>`
+    </div>`
   let formData = new FormData();
   formData.append('address',address);
   formData.append('phone',phone);
@@ -168,18 +167,59 @@ function saveDetails() {
 		dataType: 'json',
 		data: formData,
 		success: function(result) {
-			if (result) {
-        if (result == 1)
-				  showMessage("Моля влезте в профила си.");
-        else if (result == 2)
-          showMessage("Не съществува такъв профил.");
-        else if (result == 3) {
-          $("#account-page-details-col").html(saveDetailsHTML);
-        }
-			}
+      if (result == 1)
+        showMessage("Моля влезте в профила си.");
+      else if (result == 3)
+        $("#account-page-details-container").html(saveDetailsHTML);
 		},
 	});
 }
+
+function changeDetailsSales() {
+  let iban = $("#account-page-details-iban").html();
+  let changeDetailsHTML = `
+    <h4 id="account-page-details-title">Промяна на детайли: </h5>
+    <div id="account-page-details">
+      <h5>IBAN:</h5>
+      <input id="account-page-details-iban" class="form-control input-1" value="`+iban+`" placeholder="IBAN..."></input>
+      <input type="button" id="account-page-details-sales-change-confirm" class="btn btn-info btn-block btn-round button-red" value="Запази промените"></input>
+    </div>`
+  $("#account-page-details-container-sales").html(changeDetailsHTML);
+  $(document).off('click','#account-page-details-change-confirm');
+  $(document).on('click','#account-page-details-sales-change-confirm', function(){
+		saveDetailsSales();
+	});
+}
+
+function saveDetailsSales() {
+  showMessage("Успешно запазване на промени.")
+  let iban = $("#account-page-details-iban").val();
+  let saveDetailsHTML = `
+    <h4 id="account-page-details-title">Детайли за продажби: </h5>
+    <div id="account-page-details">
+      <h5>IBAN:</h5>
+      <span id="account-page-details-iban">`+iban+`</span>
+      <input type="button" id="account-page-details-sales-change" class="btn btn-info btn-block btn-round button-red" value="Промени детайли"></input>
+    </div>`
+  let formData = new FormData();
+  formData.append('iban',iban);
+  $.ajax({
+		type: "POST",
+		url: 'scripts/changeAccountDetailsSales.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+      if (result == 1)
+        showMessage("Моля влезте в профила си.");
+      else if (result == 3)
+        $("#account-page-details-container-sales").html(saveDetailsHTML);
+		},
+	});
+}
+
 
 function loadActiveItems() {
   getUserItems(0, 15)
@@ -190,5 +230,9 @@ $(function() {
 
   $(document).on('click','#account-page-details-change', function(){
 		changeDetails();
+	});
+
+  $(document).on('click','#account-page-details-sales-change', function(){
+		changeDetailsSales();
 	});
 });

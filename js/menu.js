@@ -91,10 +91,16 @@ $(function() {
 				<button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Продавам
 				</button>
+				<div id="purchase-notification-bubble">
+					<span id="purchase-notification-number"></span>
+				</div>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					<a class="dropdown-item" id="drop-create">Създай оферта</a>
 					<a class="dropdown-item" id="drop-active">Активни оферти</a>
-					<a class="dropdown-item" id="drop-inactive">Приключили оферти</a>
+					<a class="dropdown-item" id="drop-inactive">Приключили оферти
+					<div id="purchase-notification-bubble-drop">
+						<span id="purchase-notification-number-drop"></span>
+					</div></a>
 					<a class="dropdown-item" id="drop-forbidden">Забранени купувачи</a>
 				</div>
 			</div>
@@ -102,8 +108,14 @@ $(function() {
 				<button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Купувам
 				</button>
+				<div id="purchase-sent-notification-bubble">
+					<span id="purchase-sent-notification-number"></span>
+				</div>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					<a class="dropdown-item" id="drop-viewpurchase">Направени поръчки</a>
+					<a class="dropdown-item" id="drop-viewpurchase">Направени поръчки
+					<div id="purchase-sent-notification-bubble-drop">
+						<span id="purchase-sent-notification-number-drop"></span>
+					</div></a>
 					<a class="dropdown-item" id="drop-saved">Запазени артикули</a>
 				</div>
 			</div>
@@ -125,9 +137,6 @@ $(function() {
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					<a class="dropdown-item" id="drop-viewaccount">Преглед на профил</a>
 					<a class="dropdown-item" id="drop-forbidden">Забранени купувачи</a>
-					<a class="dropdown-item" id="drop-active">Активни продажби</a>
-					<a class="dropdown-item" id="drop-inactive">Приключени продажби</a>
-					<a class="dropdown-item" id="drop-viewpurchase">Направени поръчки</a>
 					<a class="dropdown-item" id="drop-logout">Изход</a>
 				</div>
 			</div>
@@ -235,58 +244,6 @@ $(function() {
 		$('#window').modal('show');
 	}
 
-	function viewPurchases(page) {
-		let formData = new FormData();
-		if (page)
-			formData.append('page', page);
-		else
-			page = 0;
-		$.ajax({
-			type: "POST",
-			url: 'scripts/getPurchases.php',
-			cache: false,
-			contentType: false,
-			processData: false,
-			dataType: 'json',
-			data: formData,
-			success: function(result) {
-				if (result) {
-					let table =
-					`<div class="container">       
-						<table class="table">
-							<thead>
-								<tr>
-									<th>Заглавие</th>
-									<th>Цена</th>
-								</tr>
-							</thead>
-							<tbody id="itemTable">
-							</tbody>
-						</table>
-						<div id="pages">
-							<i class="fas fa-arrow-left" id="view-purchases-left"></i>
-							<span id="page">Страница ` + (parseInt(page)+1) + `</span>
-							<i class="fas fa-arrow-right" id="view-purchases-right"></i>
-						</div>
-					</div>`
-					$("#window").modal('show');
-					$("#windowTitle").html("Направени поръчки");
-					$("#windowForm").html(table);
-					for (let i = 0; i < result.data.length; i++)
-						loadPurchases(result.data[i].id, result.data[i].title, result.data[i].price);
-				}
-			},
-		});
-		$(document).off('click','#view-purchases-left');
-		$(document).off('click','#view-purchases-right');
-		$(document).on('click','#view-purchases-left', function(){
-			viewPurchases(parseInt(page)-1);
-		});
-		$(document).on('click','#view-purchases-right', function(){
-			viewPurchases(parseInt(page)+1);
-		});
-	}
-
 	function viewAccount() {
 		$.ajax({
 			type: "POST",
@@ -348,45 +305,6 @@ $(function() {
 		});
 	}
 
-	function loadSubCategories1() {
-		if ($("#subCategory1Group").length)
-			$("#subCategory1Group").remove();
-		let category = $("#itemCategory").val();
-		let subCategories = ``;
-		let subCategoryDiv = 
-		`<div class="form-group" id="subCategory1Group">
-			<select class="form-control input-1" id="itemSubCategory1" onChange="loadSubCategories2()">
-				<option selected disabled>Подкатегория</option>
-			</select>
-		</div>`
-		for (let i = 0; i < categories.sub[category].length; i++)
-			subCategories += `<option value="` + i + `">` + categories.sub[category][i] + `</option>`;
-		if (subCategories) {
-			$("#categoryGroup").after(subCategoryDiv);
-			$("#itemSubCategory1").append(subCategories);
-		}
-	}
-
-	function loadSubCategories2() {
-		if ($("#subCategory2Group").length)
-			$("#subCategory2Group").remove();
-		let category = $("#itemCategory").val();
-		let subcategory = $("#itemSubCategory1").val();
-		let subCategories = ``;
-		let subCategoryDiv = 
-		`<div class="form-group" id="subCategory2Group">
-			<select class="form-control input-1" id="itemSubCategory2">
-				<option selected disabled>Подкатегория</option>
-			</select>
-		</div>`
-		for (let i = 0; i < categories.sub2[category][subcategory].length; i++)
-			subCategories += `<option value="` + i + `">` + categories.sub2[category][subcategory][i] + `</option>`;
-		if (subCategories) {
-			$("#subCategory1Group").after(subCategoryDiv);
-			$("#itemSubCategory2").append(subCategories);
-		}
-	}
-
 	function createItem() {
 		if (!($('#itemCategory').val() && $('#itemSubCategory1').val() && $('#itemSubCategory2').val())) {
 			showMessage("Моля изберете категории.");
@@ -420,108 +338,91 @@ $(function() {
 		});
 	}
 
-	function viewMessages() {
-		window.location.href = 'messages.php';
-	}
+	// function viewPurchase(id) {
+	// 	let formData = new FormData();
+	// 	formData.append('id', id);
+	// 	$.ajax({
+	// 		type: "POST",
+	// 		url: 'scripts/getItem.php',
+	// 		cache: false,
+	// 		contentType: false,
+	// 		processData: false,
+	// 		dataType: 'json',
+	// 		data: formData,
+	// 		success: function(result) {
+	// 			if (result) {
+	// 				$("#windowForm").html(
+	// 					`<i class="fas fa-arrow-left" id="back"></i>
+	// 					<div class="d-flex flex-column text-center" id="addButton">
+	// 						<img src="files/` + result.items[0].image + `" class="item-large-image">
+	// 						<div class="item-large-price">` + result.items[0].price + `лв</div>
+	// 						<div class="item-large-descr">` + result.items[0].descr + `</div>
+	// 					</div>`);
+	// 					if (result.items[0].rating == 0) 
+	// 						$("#addButton").append(`<button type="button" id="removeButton" class="btn btn-info btn-block btn-round">Остави рейтинг</button>`)
+	// 				$("#window").modal('show');
+	// 				$("#windowTitle").html(result.items[0].title);
+	// 			}
+	// 		},
+	// 	});
+	// 	$(document).off('click','#back');
+	// 	$(document).off('click','#removeButton');
+	// 	$(document).on('click','#back', function(){
+	// 		viewPurchases();
+	// 	});
+	// 	$(document).on('click','#removeButton', function(){
+	// 		confirmRating(id);
+	// 	});
+	// }
 
-	function loadPurchases(id, title, price) {
-		let item =
-		`<tr id="load-purchases">
-			<td>` + title + `</td>
-			<td>` + price + `лв</td>
-		</tr>`
-		$("#itemTable").append(item);
-		$(document).off('click','#load-purchases');
-		$(document).on('click','#load-purchases', function(){
-			viewPurchase(id)
-		});
-	}
+	// function confirmRating(id) {
+	// 	$("#windowTitle").html("Остави рейтинг");
+	// 		$("#windowForm").html(
+	// 			`<div class="d-flex text-center" id="confirm">
+	// 					<button type="button" id="create-rating-two" class="btn btn-info btn-block btn-round">+</button>
+	// 					<button type="button" id="create-rating-one" class="btn btn-info btn-block btn-round">-</button>
+	// 			</div>`
+	// 		);
+	// 	$("#window").modal('show');
+	// 	$(document).off('click','#create-rating-two');
+	// 	$(document).off('click','#create-rating-one');
+	// 	$(document).on('click','#create-rating-two', function(){
+	// 		createRating(2,id)
+	// 	});
+	// 	$(document).on('click','#create-rating-one', function(){
+	// 		createRating(1,id)
+	// 	});
+	// }
 
-	function viewPurchase(id) {
-		let formData = new FormData();
-		formData.append('id', id);
-		$.ajax({
-			type: "POST",
-			url: 'scripts/getItem.php',
-			cache: false,
-			contentType: false,
-			processData: false,
-			dataType: 'json',
-			data: formData,
-			success: function(result) {
-				if (result) {
-					$("#windowForm").html(
-						`<i class="fas fa-arrow-left" id="back"></i>
-						<div class="d-flex flex-column text-center" id="addButton">
-							<img src="files/` + result.items[0].image + `" class="item-large-image">
-							<div class="item-large-price">` + result.items[0].price + `лв</div>
-							<div class="item-large-descr">` + result.items[0].descr + `</div>
-						</div>`);
-						if (result.items[0].rating == 0) 
-							$("#addButton").append(`<button type="button" id="removeButton" class="btn btn-info btn-block btn-round">Остави рейтинг</button>`)
-					$("#window").modal('show');
-					$("#windowTitle").html(result.items[0].title);
-				}
-			},
-		});
-		$(document).off('click','#back');
-		$(document).off('click','#removeButton');
-		$(document).on('click','#back', function(){
-			viewPurchases();
-		});
-		$(document).on('click','#removeButton', function(){
-			confirmRating(id);
-		});
-	}
-
-	function confirmRating(id) {
-		$("#windowTitle").html("Остави рейтинг");
-			$("#windowForm").html(
-				`<div class="d-flex text-center" id="confirm">
-						<button type="button" id="create-rating-two" class="btn btn-info btn-block btn-round">+</button>
-						<button type="button" id="create-rating-one" class="btn btn-info btn-block btn-round">-</button>
-				</div>`
-			);
-		$("#window").modal('show');
-		$(document).off('click','#create-rating-two');
-		$(document).off('click','#create-rating-one');
-		$(document).on('click','#create-rating-two', function(){
-			createRating(2,id)
-		});
-		$(document).on('click','#create-rating-one', function(){
-			createRating(1,id)
-		});
-	}
-
-	function createRating(rate, id) {
-		let formData = new FormData();
-		formData.append('id', id);
-		formData.append('rate', rate);
-		$.ajax({
-			type: "POST",
-			url: 'scripts/createRating.php',
-			cache: false,
-			contentType: false,
-			processData: false,
-			dataType: 'json',
-			data: formData,
-			success: function(result) {
-				if (result) {
-					if (result == 4)
-						showMessage("Успешно зададен рейтинг.");
-					else if (result == 3)
-						showMessage("Неуспешно задаване на рейтинг.");
-					else if (result == 2)
-						showMessage("Рейтингът може да е само между + и -");
-					else if (result == 1)
-						showMessage("Тази поръчка не е ваша.");
-					else
-						showMessage("Неуспешно задаване на рейтинг.");
-					$("#window").modal('hide');
-				}
-			},
-		});
-	}
+	// function createRating(rate, id) {
+	// 	let formData = new FormData();
+	// 	formData.append('id', id);
+	// 	formData.append('rate', rate);
+	// 	$.ajax({
+	// 		type: "POST",
+	// 		url: 'scripts/createRating.php',
+	// 		cache: false,
+	// 		contentType: false,
+	// 		processData: false,
+	// 		dataType: 'json',
+	// 		data: formData,
+	// 		success: function(result) {
+	// 			if (result) {
+	// 				if (result == 4)
+	// 					showMessage("Успешно зададен рейтинг.");
+	// 				else if (result == 3)
+	// 					showMessage("Неуспешно задаване на рейтинг.");
+	// 				else if (result == 2)
+	// 					showMessage("Рейтингът може да е само между + и -");
+	// 				else if (result == 1)
+	// 					showMessage("Тази поръчка не е ваша.");
+	// 				else
+	// 					showMessage("Неуспешно задаване на рейтинг.");
+	// 				$("#window").modal('hide');
+	// 			}
+	// 		},
+	// 	});
+	// }
 
 
 	function loadAccount() {
@@ -708,6 +609,7 @@ function getUserItems(mode, uid, page) {
 				});
 				for (let i = 0; i < result.items.length; i++)
 					loadItemTable(result.items[i].id, result.items[i].title, result.items[i].price);
+				checkPurchaseNotification();
 			} else {
 				showMessage("Няма открити резултати.");
 			}
@@ -718,13 +620,16 @@ function getUserItems(mode, uid, page) {
 function loadItemTable(id, title, price) {
 	let item =
 	`<tr class="item-table-` + id + `">
-		<td>` + title + `</td>
-		<td>` + price + `лв</td>
+		<td class="item-table-row">` + title + `</td>
+		<td class="item-table-row">` + price + `лв
+		<div id="purchase-notification-bubble-item-` + id + `" class="purchase-notification-bubble-item">
+			<span class="purchase-notification-number-item">!</span>
+		</div></td>
 	</tr>`
 	$("#itemTable").append(item);
 	$(document).off('click','.item-table-'+id);
 	$(document).on('click','.item-table-'+id, function(){
-		viewTableItem(id)
+		viewItem(id)
 	});
 }
 
@@ -762,6 +667,76 @@ function viewTableItem(id) {
 				});
 			}
 		},
+	});
+}
+
+function viewPurchases(page) {
+	let formData = new FormData();
+	if (page)
+		formData.append('page', page);
+	else
+		page = 0;
+	$.ajax({
+		type: "POST",
+		url: 'scripts/getPurchases.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result) {
+				let table =
+				`<div class="container">       
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Заглавие</th>
+								<th>Цена</th>
+							</tr>
+						</thead>
+						<tbody id="itemTable">
+						</tbody>
+					</table>
+					<div id="pages">
+						<i class="fas fa-arrow-left" id="view-purchases-left"></i>
+						<span id="page">Страница ` + (parseInt(page)+1) + `</span>
+						<i class="fas fa-arrow-right" id="view-purchases-right"></i>
+					</div>
+				</div>`
+				$("#window").modal('show');
+				$("#windowTitle").html("Направени поръчки");
+				$("#windowForm").html(table);
+				for (let i = 0; i < result.data.length; i++)
+					loadPurchases(result.data[i].id, result.data[i].title, result.data[i].price);
+				checkPurchaseSentNotification();
+			}
+		},
+	});
+	$(document).off('click','#view-purchases-left');
+	$(document).off('click','#view-purchases-right');
+	$(document).on('click','#view-purchases-left', function(){
+		viewPurchases(parseInt(page)-1);
+	});
+	$(document).on('click','#view-purchases-right', function(){
+		viewPurchases(parseInt(page)+1);
+	});
+}
+
+function loadPurchases(id, title, price) {
+	let item =
+	`<tr class="item-table-purchases-` + id + `">
+		<td class="item-table-row">` + title + `</td>
+		<td class="item-table-row">` + price + `лв
+		<div id="purchase-sent-notification-bubble-item-` + id + `" class="purchase-sent-notification-bubble-item">
+			<span class="purchase-sent-notification-number-item">!</span>
+		</div></td>
+	</tr>`
+	$("#itemTable").append(item);
+	$(document).off('click','.item-table-purchases-'+id);
+	$(document).on('click','.item-table-purchases-'+id, function(){
+		viewItem(id)
+		clearSentPurchasesNotifications(id);
 	});
 }
 
@@ -817,4 +792,43 @@ function cancelRemoveItem(id) {
 	$(document).on('click','#removeButton-cancel', function(){
 		removeItemConfirm(id);
 	});
+}
+
+function loadSubCategories1() {
+	if ($("#subCategory1Group").length)
+		$("#subCategory1Group").remove();
+	let category = $("#itemCategory").val();
+	let subCategories = ``;
+	let subCategoryDiv = 
+	`<div class="form-group" id="subCategory1Group">
+		<select class="form-control input-1" id="itemSubCategory1" onChange="loadSubCategories2()">
+			<option selected disabled>Подкатегория</option>
+		</select>
+	</div>`
+	for (let i = 0; i < categories.sub[category].length; i++)
+		subCategories += `<option value="` + i + `">` + categories.sub[category][i] + `</option>`;
+	if (subCategories) {
+		$("#categoryGroup").after(subCategoryDiv);
+		$("#itemSubCategory1").append(subCategories);
+	}
+}
+
+function loadSubCategories2() {
+	if ($("#subCategory2Group").length)
+		$("#subCategory2Group").remove();
+	let category = $("#itemCategory").val();
+	let subcategory = $("#itemSubCategory1").val();
+	let subCategories = ``;
+	let subCategoryDiv = 
+	`<div class="form-group" id="subCategory2Group">
+		<select class="form-control input-1" id="itemSubCategory2">
+			<option selected disabled>Подкатегория</option>
+		</select>
+	</div>`
+	for (let i = 0; i < categories.sub2[category][subcategory].length; i++)
+		subCategories += `<option value="` + i + `">` + categories.sub2[category][subcategory][i] + `</option>`;
+	if (subCategories) {
+		$("#subCategory1Group").after(subCategoryDiv);
+		$("#itemSubCategory2").append(subCategories);
+	}
 }

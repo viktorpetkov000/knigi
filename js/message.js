@@ -264,10 +264,7 @@ $(function() {
           else
             $("#message-notification-bubble").css("display","none");
         }
-      },
-      error: function(result) {
-        console.log(result);
-      },
+      }
     });
   }
   
