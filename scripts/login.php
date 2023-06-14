@@ -21,7 +21,8 @@
 				$uid = $getSaltRow['uid'];
 				$admin = $getSaltRow['isadmin'];
 				$banned = $getSaltRow['banned'];
-				$ePassword = md5(md5($password).$salt);
+				// $ePassword = md5(md5($password).$salt);
+				$ePassword = hash('sha256', hash('sha256', $password) . $salt);
 				if ($ePassword == $dbPassword) {
 					if (!$banned) {
 						$_SESSION['uid'] = $uid;

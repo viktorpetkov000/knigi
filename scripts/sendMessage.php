@@ -17,6 +17,9 @@
   if(isset($_POST['message']))
     $message = $_POST['message'];
 
+  if (isset($_SESSION['contactSeller']))
+		$receivedby = $_SESSION['contactSeller'];
+
   if($message != "") {
     $query = "INSERT INTO messages(sentby,receivedby,message,created) VALUES('$sentby','$receivedby','$message','$created')";
     $result = mysqli_query($conn,$query) or die(mysqli_error($conn));

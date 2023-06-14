@@ -552,6 +552,19 @@ body {
 }
 
 .contact {
+	font-family: Yanone Kaffeesatz;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 17px;
+	text-align: center;
+	letter-spacing: 0.05em;
+	color: #4F000B!important;
+	height: 32px;
+	background: #FFF9F3;
+	box-shadow: inset 0px 0px 10px rgba(79, 0, 11, 0.53);
+	border-radius: 5px;
+	margin-bottom: 8px;
+	position: relative;
 	padding: 5px;
 	text-align: center;
 	cursor: pointer;
@@ -566,6 +579,21 @@ body {
 
 #chat-container {
 	width: 100%;
+	margin-bottom: 30px;
+	position: relative;
+	background: #FFFBF8;
+}
+
+#chat-container::after {
+	position: absolute;
+	top: -3px;
+	bottom: -3px;
+	left: -3px;
+	right: -3px;
+	background: linear-gradient(92.07deg, #CE4257 0, #FF7F51 104.11%);
+	content: '';
+	z-index: -1;
+	border-radius: 6px;
 }
 
 #send-message {
@@ -1855,9 +1883,24 @@ body {
 	width: 100%;
 	padding: 30px 14px;
 	margin-top: 20px;
+	display: none;
 }
 
-.item-window-info2-contact-text {
+.item-window-info2-profile {
+	background: #FFFBF8;
+	box-shadow: inset 0px 0px 20px rgba(79, 0, 11, 0.4);
+	border-radius: 5px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 20px 14px;
+	margin-top: 20px;
+	position: relative;
+}
+
+.item-window-info2-contact-text, .item-window-info2-profile-text, .item-window-info2-profile-text-name {
 	font-family: Yanone Kaffeesatz;
 	font-style: normal;
 	font-weight: normal;
@@ -1868,8 +1911,20 @@ body {
 	color: #4F000B;
 }
 
+.item-window-info2-profile-text {
+	font-size: 14px;
+	position: absolute;
+	top: 5%;
+}
+
 .item-window-info2-contact-image {
 	position: absolute;
+}
+
+.item-window-info2-profile-image {
+	position: absolute;
+	opacity: 30%;
+	width: 30%;
 }
 
 .cat-body .navbar {

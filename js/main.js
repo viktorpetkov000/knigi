@@ -80,6 +80,9 @@ function viewItem(id, mode) {
 								<img src="./assets/contact.png" class="item-window-info2-contact-image"/>
 							</div>
 							<div class="item-window-info2-profile">
+								<span class="item-window-info2-profile-text">Потребител: </span>
+								<span class="item-window-info2-profile-text-name"></span>
+								<img src="./assets/users.png" class="item-window-info2-profile-image"/>
 							</div>
 							<div id="item-window-options">
 							</div>
@@ -97,6 +100,13 @@ function viewItem(id, mode) {
 				let sent = result.items[0].sent;
 				let received = result.items[0].received;
 				let rating = result.items[0].rating;
+				let username = result.sellerName;
+				let sellerUid = result.sellerUid;
+				$(".item-window-info2-profile-text-name").html(username);
+				$(document).off('click','.item-window-info2-profile');
+				$(document).on('click','.item-window-info2-profile', function(){
+					window.location.href = './account.php?uid='+sellerUid;
+				});
 				if (ended == 1) {
 					$(".item-window-save").css('display','none');
 					$(".item-window-info2-contact").css('display','none');
@@ -108,8 +118,7 @@ function viewItem(id, mode) {
 							if (rating) {
 								$("#item-window-rating").html(`<span>Rating: `+ rating +`</span>`)
 							}
-						}
-						else {
+						} else {
 							if (sent == 1) {
 								$("#item-window-options").html(`
 									<button type="button" class="btn btn-info btn-block btn-round button-red" disabled>Поръчката е изпратена</button>
@@ -123,6 +132,29 @@ function viewItem(id, mode) {
 									sendPurchase(itemId);
 								});
 							}
+						}
+					} else if (result.boughtItem) {
+						if (sent == 1 && received == 1) {
+							$("#item-window-options").html(`
+								<button type="button" class="btn btn-info btn-block btn-round button-red" disabled>Поръчката е получена</button>
+							`)
+							if (rating) {
+								$("#item-window-rating").html(`<span>Rating: `+ rating +`</span>`)
+							} else {
+								$("#item-window-rating").html(`<span>Остави рейтинг</span>`)
+							}
+						} else if (sent == 1) {
+							$("#item-window-options").html(`
+								<button type="button" id="mark-order-received" class="btn btn-info btn-block btn-round button-red">Маркирай поръчката като получена</button>
+							`)
+							$(document).off('click','#mark-order-received');
+							$(document).on('click','#mark-order-received', function(){
+								receivePurchase(itemId);
+							});
+						} else {
+							$("#item-window-options").html(`
+								<button type="button" class="btn btn-info btn-block btn-round button-red disabled">Поръчката се очаква да бъде изпратена</button>
+							`)
 						}
 					}
 				}
@@ -154,68 +186,76 @@ function viewItem(id, mode) {
 										errorMessage = "Невалидна поръчка.";
 									else if (result == 3)
 										errorMessage = "Тази продажба е приключила.";
-									else if (result == 4)
+									else if (result == 4) {
 										validationFlag = true;
+									}
 									else if (result == 5)
 										errorMessage = "Не може да купите собствена продажба.";
 									else if (result == 6)
 										errorMessage = "Моля добавете адрес и телефонен номер в профилът си.";
 									else
 										errorMessage = "Възникна проблем.";
-									paypal.Buttons({
-										style : {
-											color: 'blue',
-											shape: 'pill',
-											height: 35,
-										},
-										createOrder: function (data, actions) {
-											if (!validationFlag) {
-												showMessage(errorMessage)
-												return;
-											}
-											return actions.order.create({
-												purchase_units : [{
-														amount: {
-															value: itemPrice
-														}
-													}]
-												});
+									if (result == 4 || result == 6) {
+										paypal.Buttons({
+											style : {
+												color: 'blue',
+												shape: 'pill',
+												height: 35,
 											},
-										onApprove: function (data, actions) {
-											return actions.order.capture().then(function (details) {
-												$("#item-window-form").html(`
-													<div>
-														<span>Успешно направена поръчка! Натиснете <a href="#" id="open-orders-href">Тук</a> за да видите поръчките си.</span>
-													</div>
-												`);
-												formData = new FormData;
-												formData.append('iid', itemId);
-												formData.append('sid', itemUid);
-												formData.append('paypal_id', details.id);
-												formData.append('paypal_email', details.payer.email_address);
-												formData.append('paypal_user_id', details.payer.payer_id);
-												formData.append('paypal_date', details.create_time);
-												$.ajax({
-													type: "POST",
-													url: 'scripts/purchase.php',
-													cache: false,
-													contentType: false,
-													processData: false,
-													dataType: 'json',
-													data: formData,
-													success: function(result) {
-														if (result == 4) {
-															showMessage("Успешна поръчка.");
-															getLatest();
-														} else showMessage("Възникна проблем. Моля свържете се с нас.");
-													},
-												});
-											})
-										},
-										onCancel: function (data) {
-											showMessage("Неуспешно направена поръчка");
-										}
-									}).render('#paypal-payment-button');
+											createOrder: function (data, actions) {
+												if (!validationFlag) {
+													showMessage(errorMessage)
+													return;
+												}
+												return actions.order.create({
+													purchase_units : [{
+															amount: {
+																value: itemPrice
+															}
+														}]
+													});
+												},
+											onApprove: function (data, actions) {
+												return actions.order.capture().then(function (details) {
+													$("#item-window-form").html(`
+														<div>
+															<span>Успешно направена поръчка! Натиснете <a href="#" id="open-orders-href">Тук</a> за да видите поръчките си.</span>
+														</div>
+													`);
+													formData = new FormData;
+													formData.append('iid', itemId);
+													formData.append('sid', itemUid);
+													formData.append('paypal_id', details.id);
+													formData.append('paypal_email', details.payer.email_address);
+													formData.append('paypal_user_id', details.payer.payer_id);
+													formData.append('paypal_date', details.create_time);
+													$.ajax({
+														type: "POST",
+														url: 'scripts/purchase.php',
+														cache: false,
+														contentType: false,
+														processData: false,
+														dataType: 'json',
+														data: formData,
+														success: function(result) {
+															if (result == 4) {
+																showMessage("Успешна поръчка.");
+																getLatest();
+															} else showMessage("Възникна проблем. Моля свържете се с нас.");
+														},
+													});
+												})
+											},
+											onCancel: function (data) {
+												showMessage("Неуспешно направена поръчка");
+											}
+										}).render('#paypal-payment-button');
+										$(".item-window-info2-contact").css('display','flex');
+										$(document).off('click','.item-window-info2-contact');
+										$(document).on('click','.item-window-info2-contact', function(){
+											contactSeller(itemUid);
+										});
+									}
 								},
 							});
 						}
@@ -303,6 +343,7 @@ function checkPurchaseNotification() {
 		success: function(result) {
 			$(".purchase-notification-bubble-item").css("display","none");
 			$("#purchase-notification-bubble").css("display","none");
+			$("#purchase-notification-bubble-drop").css("display","none");
 			if (result) {
 				purchaseNotifications = result.data.length;
 				$("#purchase-notification-number").html(purchaseNotifications);
@@ -330,6 +371,7 @@ function checkPurchaseSentNotification() {
 		success: function(result) {
 			$(".purchase-sent-notification-bubble-item").css("display","none");
 			$("#purchase-sent-notification-bubble").css("display","none");
+			$("#purchase-sent-notification-bubble-drop").css("display","none");
 			if (result) {
 				purchaseSentNotifications = result.data.length;
 				$("#purchase-sent-notification-number").html(purchaseSentNotifications);
@@ -408,20 +450,41 @@ function sendPurchase(iid) {
 					<button type="button" class="btn btn-info btn-block btn-round button-red" disabled>Поръчката е изпратена</button>
 				`)
 				checkPurchaseNotification();
-			} else {
+			} else
 				showMessage("Имаше грешка при маркирането на поръчката. Моля свържете се с нас");
-			}
+		},
+	});
+}
+
+function receivePurchase(iid) {
+	let formData = new FormData();
+	formData.append('iid', iid);
+	$.ajax({
+		type: "POST",
+		url: 'scripts/receivePurchase.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result) {
+				showMessage("Успешно маркиране на поръчката като получена");
+				$("#item-window-options").html(`
+					<button type="button" class="btn btn-info btn-block btn-round button-red" disabled>Поръчката е получена</button>
+				`)
+			} else
+				showMessage("Имаше грешка при маркирането на поръчката. Моля свържете се с нас");
 		},
 	});
 }
 
 function contactSeller(sid) {
 	let formData = new FormData();
-	formData.append('receivedby', sid);
-	formData.append('message', "Закупих вашата продажба - " + $("#item-page-title").html());
+	formData.append('contactUser', sid);
 	$.ajax({
 		type: "POST",
-		url: 'scripts/sendMessage.php',
+		url: 'scripts/contactUser.php',
 		cache: false,
 		contentType: false,
 		processData: false,
@@ -429,8 +492,10 @@ function contactSeller(sid) {
 		data: formData,
 		success: function(result) {
 			if (result)
-				window.location.href = 'messages.php?cid='+sid;
-		},
+				window.location.href = './messages.php?contact=true';
+			else
+				showMessage("Възникна грешка.");
+		}
 	});
 }
 

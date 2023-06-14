@@ -101,7 +101,6 @@ $(function() {
 					<div id="purchase-notification-bubble-drop">
 						<span id="purchase-notification-number-drop"></span>
 					</div></a>
-					<a class="dropdown-item" id="drop-forbidden">Забранени купувачи</a>
 				</div>
 			</div>
 			<div class="dropdown nav-link">
@@ -136,7 +135,6 @@ $(function() {
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					<a class="dropdown-item" id="drop-viewaccount">Преглед на профил</a>
-					<a class="dropdown-item" id="drop-forbidden">Забранени купувачи</a>
 					<a class="dropdown-item" id="drop-logout">Изход</a>
 				</div>
 			</div>
@@ -424,6 +422,12 @@ $(function() {
 	// 	});
 	// }
 
+function validateEmail(email) {
+	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
+		return true;
+	return false;
+}
+
 
 	function loadAccount() {
 		$.ajax({
@@ -454,12 +458,6 @@ $(function() {
 					$("#menuLogin").html(oldMenu);
 			},
 		});
-	}
-
-	function validateEmail(email) {
-		if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
-			return true;
-		return false;
 	}
 
 	$(document).on('keypress','#loginForm',function(e){

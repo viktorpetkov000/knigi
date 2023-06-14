@@ -20,18 +20,20 @@
 	if (isset($_POST['terms']))
 		$terms = $_POST['terms'];
 
-$hash = md5(rand(0,1000));
-$subject = 'Потвърждение на профил';
-$message = '
+// $hash = md5(rand(0,1000));
+$hash = hash("sha256", rand(0,1000));
+// $subject = 'Потвърждение на профил';
+// $message = '
 
-Благодаря за регистрацията!
-Вашият профил бе създаден.
+// Благодаря за регистрацията!
+// Вашият профил бе създаден.
   
-Моля използвайте този адрес за да активирате профилът си:
-http://www.yourwebsite.com/?email='.$email.'&code='.$hash.'
-';
+// Моля използвайте този адрес за да активирате профилът си:
+// http://www.knigi.com/?email='.$email.'&code='.$hash.'
+// ';
 $headers = 'From:noreply@yourwebsite.com' . "\r\n"; // Set from headers
-	$newPassword = md5(md5($password).$salt);
+	// $newPassword = md5(md5($password).$salt);
+	$newPassword = hash("sha256", hash("sha256", $password).$salt);
 	if ($username != "" && $email != "" && $password != "" && $cpassword != "" && $terms == "true") { 
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$checkUser = "SELECT * FROM accounts WHERE email = '$email'";
@@ -46,7 +48,7 @@ $headers = 'From:noreply@yourwebsite.com' . "\r\n"; // Set from headers
 							$insertUserStatus = mysqli_query($conn,$insertUser) or die(mysqli_error($conn));
 							if ($insertUserStatus) {
 								//mail($email, $subject, $message, $headers);
-								echo "Успешна регистрация, моля активирайте профилът си от зададения имейл.";
+								echo "Успешна регистрация.";
 							}
 							else
 								echo "Неуспешна регистрация.";

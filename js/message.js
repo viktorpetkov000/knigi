@@ -4,7 +4,7 @@ let notifications = 0;
 
 $(function() {
   $(document).on('keypress','#controls',function(e){
-		if(e.which == 13) {
+		if(e.which == 13 && !e.shiftKey) {
       e.preventDefault();
 			sendMessage($("#send-message-button").attr("contact"));
 		}
@@ -14,8 +14,20 @@ $(function() {
   checkNotifications();
   setInterval(receiveMessage, 60000);
   setInterval(checkNotifications, 60000);
-  if (getUrlParameter('cid'))
-    getMessages(getUrlParameter('cid'));
+  if (getUrlParameter('contact')) {
+    $.ajax({
+      type: "POST",
+      url: 'scripts/getContactSession.php',
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: 'json',
+      data: [],
+      success: function(result) {
+        getMessages(result)
+      }
+    });
+  }
 
   function getContacts() {
     $.ajax({
@@ -71,10 +83,11 @@ $(function() {
                 let contact = "";
                 for (i = 0; i < result.data.length; i++) {
                   contact =
-                  `<div id="message-contact-` + result.data[i].uid + `" class="contact btn btn-info btn-block btn-round">
+                  `<div id="message-contact-` + result.data[i].uid + `" class="contact">
                     ` + result.data[i].username + `
                   </div>`
                   let fixuid = result.data[i].uid;
+                  $(document).off('click','#message-contact-' + fixuid);
                   $(document).on('click','#message-contact-' + fixuid, function(){
                     getMessages(fixuid);
                     checkNotifications();
@@ -90,6 +103,8 @@ $(function() {
                   <i id="contact-list-right" class="fas fa-arrow-right"></i>
                 </div>
                 `)
+                $(document).off('click','#contact-list-left');
+                $(document).off('click','#contact-list-right');
                 $(document).on('click','#contact-list-left', function(){
                   contactPages(1);
                 });
@@ -117,6 +132,7 @@ $(function() {
             </div>`
           }
           let fixuid = result.data[i].uid;
+          $(document).off('click','#message-contact-page-' + fixuid);
           $(document).on('click','#message-contact-page-' + fixuid, function(){
             getMessages(fixuid);
           });
@@ -150,10 +166,11 @@ $(function() {
           <textarea id="send-message"></textarea>
         </div>
         <div class="col-3" style="padding-left: 0">
-          <button type="button" id="send-message-button" class="btn btn-info btn-block btn-round" contact="`+contact+`">Изпрати</button>
+          <button type="button" id="send-message-button" class="btn btn-info btn-block btn-round button-red" contact="`+contact+`">Изпрати</button>
         </div>
       </div>
     </div>`
+    $(document).off('click','#send-message-button');
     $(document).on('click','#send-message-button', function(){
       sendMessage(contact);
     });
@@ -166,7 +183,11 @@ $(function() {
       dataType: 'json',
       data: formData,
       success: function(result) {
-        if (result) {
+        if (result == 5) {
+          let message = "";
+          $("#chat").html(chat);
+          refresher = setInterval(function(){ refreshMessages(contact) }, 1000);
+        } else if (result) {
           let message = "";
           $("#chat").html(chat);
           for (i = 0; i < result.data.length; i++) {
@@ -222,7 +243,6 @@ $(function() {
           for (i = 0; i < result.new.length; i++)
             if ($("#send-message-button").attr("contact") != result.new[i].sentby)
               users.push(result.new[i].sentby);
-          // notifications += result.new.length;
           let formData = new FormData();
           formData.append('uid', users);
           $.ajax({
@@ -235,8 +255,6 @@ $(function() {
             data: formData,
             success: function(result) {
               if (result) {
-                // $("#message-notification-number").html(notifications);
-                // $("#message-notification-bubble").css("display","block");
                 showMessage("Нови съобщения от: " + result.data.map(e => e.username).join(", "));
               }
             },
@@ -290,8 +308,19 @@ $(function() {
       },
     });
   }
-
-  function setMessagesRead() {
-
-  }
 });
+
+var getUrlParameter = function getUrlParameter(sParam) {
+  var sPageURL = window.location.search.substring(1),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+
+    if (sParameterName[0] === sParam) {
+      return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+    }
+  }
+};

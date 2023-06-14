@@ -8,7 +8,7 @@
 		$uid = $_SESSION['uid'];
 
 	if ($uid) {
-			$query = "UPDATE items SET sent = 1, read_buyer = 0 WHERE id = '$iid' AND uid = '$uid'";
+			$query = "UPDATE items SET received = 1 WHERE id = '$iid' AND buyerid = '$uid' AND sent = 1 AND ended = 1";
 			$result = mysqli_query($conn,$query) or die(mysqli_error($conn));
 			if (mysqli_affected_rows($conn))
 				echo json_encode(true);
