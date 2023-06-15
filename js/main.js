@@ -44,31 +44,42 @@ function viewItem(id, mode) {
 						</div>
 						<div class="item-window-info1">
 							<div class="item-window-info1-title">
-								<span class="item-window-info1-title-text">Мед и Мляко - Иван Вазов - 1905г</span>
+								<span class="item-window-info1-title-text"></span>
 							</div>
 							<div class="item-window-info1-combine">
 								<div class="item-window-info1-description">
 									<span class="item-window-info1-description-text-title">Описание:</span>
 									<img src="./assets/separator.png"/>
-									<span class="item-window-info1-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur vestibulum nunc consequat eget morbi nisl. Odio nulla turpis in lacus vel in. Tincidunt sed nulla habitant turpis tempor elementum purus nullam posuere. Leo vitae nam et, massa quam tempor sit nullam posuere. Aenean lacus libero adipiscing laoreet porttitor elit. Velit dictum erat nunc, adipiscing pulvinar cras a. A, habitant et pellentesque id dignissim egestas. Est arcu curabitur neque, quis commodo, sit suspendisse nibh</span>
+									<span class="item-window-info1-description-text"></span>
 								</div>
 								<div class="item-window-info1-specs">
 									<span class="item-window-info1-description-text-title">Характеристики:</span>
 									<img src="./assets/separator.png"/>
 									<span class="item-window-info1-spec-text">
-										Автор: <span class="item-window-info1-spec-author item-window-info1-spec-text2">Иван Вазов</span>
+										Автор: <span class="item-window-info1-spec-author item-window-info1-spec-text2"></span>
 										<br>
-										Издател: <span class="item-window-info1-spec-publisher item-window-info1-spec-text2">Сиела</span>
+										Издател: <span class="item-window-info1-spec-publisher item-window-info1-spec-text2"></span>
 										<br>
-										Година: <span class="item-window-info1-spec-year item-window-info1-spec-text2">1905</span>
+										Година: <span class="item-window-info1-spec-year item-window-info1-spec-text2"></span>
 										<br>
-										Обем: <span class="item-window-info1-spec-size item-window-info1-spec-text2">210 стр.</span>
+										Обем: <span class="item-window-info1-spec-size item-window-info1-spec-text2"></span>
 										<br>
-										Състояние: <span class="item-window-info1-spec-condition item-window-info1-spec-text2">Ново</span>
+										Състояние: <span class="item-window-info1-spec-condition item-window-info1-spec-text2"></span>
 									</span>
 								</div>
 							</div>
-						</div>
+							<div id="item-window-info-3">
+								<div class="item-window-info3-delivery">
+									<span class="item-window-info3-delivery-title">Информация за купувач</span>
+								</div>
+								<div class="item-window-info3-delivery-info">
+									<span class="item-window-info1-spec-text">
+										Aдрес: <span class="item-window-info3-address item-window-info1-spec-text2"></span>
+										<br>
+										Телефон: <span class="item-window-info3-phone item-window-info1-spec-text2"></span>
+									</div>
+								</div>
+							</div>
 						<div class="item-window-info2">
 							<div class="item-window-info2-price">
 								<span class="item-window-info2-price-text">35.90</span>
@@ -79,14 +90,19 @@ function viewItem(id, mode) {
 								<span class="item-window-info2-contact-text">СВЪРЖИ СЕ С ТЪРГОВЕЦА</span>
 								<img src="./assets/contact.png" class="item-window-info2-contact-image"/>
 							</div>
+							<div id="item-window-options">
+							</div>
 							<div class="item-window-info2-profile">
 								<span class="item-window-info2-profile-text">Потребител: </span>
 								<span class="item-window-info2-profile-text-name"></span>
 								<img src="./assets/users.png" class="item-window-info2-profile-image"/>
 							</div>
-							<div id="item-window-options">
-							</div>
 							<div id="item-window-rating">
+								<span class="leave-rating item-window-info1-spec-text2">Остави оценка</span>
+								<div class="rating-options">
+									<img src="./assets/thumbsup.png" class="items-rating-thumbsup"/>
+									<img src="./assets/thumbsdown.png" class="items-rating-thumbsdown"/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -102,6 +118,9 @@ function viewItem(id, mode) {
 				let rating = result.items[0].rating;
 				let username = result.sellerName;
 				let sellerUid = result.sellerUid;
+				let buyerUid = result.items[0].buyerid;
+				let address = result.address;
+				let phone = result.phone;
 				$(".item-window-info2-profile-text-name").html(username);
 				$(document).off('click','.item-window-info2-profile');
 				$(document).on('click','.item-window-info2-profile', function(){
@@ -111,12 +130,31 @@ function viewItem(id, mode) {
 					$(".item-window-save").css('display','none');
 					$(".item-window-info2-contact").css('display','none');
 					if (result.ownItem) {
+						$("#item-window-info-3").css('display','block');
+						$(".item-window-info2-contact-text").html("Свържи се с купувача");
+						$(".item-window-info2-contact").css('display','flex');
+						$(".item-window-info3-address").html(address);
+						$(".item-window-info3-phone").html(phone);
+						$(document).off('click','.item-window-info2-contact');
+						$(document).on('click','.item-window-info2-contact', function(){
+							contactSeller(buyerUid);
+						});
 						if (sent == 1 && received == 1) {
 							$("#item-window-options").html(`
 								<button type="button" class="btn btn-info btn-block btn-round button-red" disabled>Поръчката е получена</button>
 							`)
-							if (rating) {
-								$("#item-window-rating").html(`<span>Rating: `+ rating +`</span>`)
+							$("#item-window-rating").css('display','block');
+							
+							if (rating == 1) {
+								$(".leave-rating").html("Оценка")
+								$(".items-rating-thumbsup").css('display','block');
+								$(".items-rating-thumbsdown").css('display','none');
+							} else if (rating == 2) {
+								$(".leave-rating").html("Оценка")
+								$(".items-rating-thumbsdown").css('display','block');
+								$(".items-rating-thumbsup").css('display','none');
+							} else {
+								$(".leave-rating").html("Няма оценка")
 							}
 						} else {
 							if (sent == 1) {
@@ -134,15 +172,35 @@ function viewItem(id, mode) {
 							}
 						}
 					} else if (result.boughtItem) {
-						if (sent == 1 && received == 1) {
+						$("#item-window-info-3").css('display','block');
+						$(".item-window-info2-contact-text").html("Свържи се с продавача");
+						$(".item-window-info2-contact").css('display','flex');
+						$(".item-window-info3-address").html(address);
+						$(".item-window-info3-phone").html(phone);
+						$(document).off('click','.item-window-info2-contact');
+						$(document).on('click','.item-window-info2-contact', function(){
+							contactSeller(sellerUid);
+						});
+						if (sent == 1 && received == 1) {			
 							$("#item-window-options").html(`
 								<button type="button" class="btn btn-info btn-block btn-round button-red" disabled>Поръчката е получена</button>
 							`)
-							if (rating) {
-								$("#item-window-rating").html(`<span>Rating: `+ rating +`</span>`)
-							} else {
-								$("#item-window-rating").html(`<span>Остави рейтинг</span>`)
+							$("#item-window-rating").css('display','block');
+							$(".items-rating-thumbsup").css('display','block');
+							$(".items-rating-thumbsdown").css('display','block');
+							if (rating == 1) {
+
+							} else if (rating == 2) {
+
 							}
+							$(document).off('click','.items-rating-thumbsdown');
+							$(document).on('click','.items-rating-thumbsdown', function(){
+								createRating(itemId, 2);
+							});
+							$(document).off('click','.items-rating-thumbsup');
+							$(document).on('click','.items-rating-thumbsup', function(){
+								createRating(itemId, 1);
+							});
 						} else if (sent == 1) {
 							$("#item-window-options").html(`
 								<button type="button" id="mark-order-received" class="btn btn-info btn-block btn-round button-red">Маркирай поръчката като получена</button>
@@ -331,6 +389,35 @@ function viewItem(id, mode) {
 	});
 }
 
+function createRating(id, rate) {
+	let formData = new FormData();
+	formData.append('id', id);
+	formData.append('rate', rate);
+	$.ajax({
+		type: "POST",
+		url: 'scripts/createRating.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result) {
+				if (result == 4)
+					showMessage("Успешно зададен рейтинг.");
+				else if (result == 3)
+					showMessage("Неуспешно задаване на рейтинг.");
+				else if (result == 2)
+					showMessage("Рейтингът може да е само между + и -");
+				else if (result == 1)
+					showMessage("Тази поръчка не е ваша.");
+				else
+					showMessage("Неуспешно задаване на рейтинг.");
+			}
+		},
+	});
+}
+
 function checkPurchaseNotification() {
 	$.ajax({
 		type: "POST",
@@ -405,32 +492,41 @@ function clearSentPurchasesNotifications(id) {
 	});
 }
 
-// function checkPurchaseReceivedNotification() {
-// 	$.ajax({
-// 		type: "POST",
-// 		url: 'scripts/checkPurchaseSentNotifications.php',
-// 		cache: false,
-// 		contentType: false,
-// 		processData: false,
-// 		dataType: 'json',
-// 		data: [],
-// 		success: function(result) {
-// 			$(".purchase-notification-bubble-item").css("display","none");
-// 			$("#purchase-notification-bubble").css("display","none");
-// 			if (result) {
-// 				purchaseNotifications = result.data.length;
-// 				$("#purchase-notification-number").html(purchaseNotifications);
-// 				$("#purchase-notification-number-drop").html(purchaseNotifications);
-// 				if (purchaseNotifications > 0) {
-// 					$("#purchase-notification-bubble").css("display","block");
-// 					$("#purchase-notification-bubble-drop").css("display","block");
-// 					for (i = 0; i < purchaseNotifications; i++)
-// 						$('#purchase-notification-bubble-item-'+result.data[i].id).css('display','block');
-// 				}
-// 			}
-// 		}
-// 	});
-// }
+function clearReceivedPurchasesNotifications(id) {
+	formData = new FormData;
+	formData.append('iid', id);
+	$.ajax({
+		type: "POST",
+		url: 'scripts/clearReceivedPurchasesNotifications.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result)
+				checkPurchaseNotification();
+		}
+	});
+}
+
+function clearRatingNotifications(id) {
+	formData = new FormData;
+	formData.append('iid', id);
+	$.ajax({
+		type: "POST",
+		url: 'scripts/clearRatingNotifications.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result)
+				checkPurchaseNotification();
+		}
+	});
+}
 
 function sendPurchase(iid) {
 	let formData = new FormData();
@@ -502,8 +598,6 @@ function contactSeller(sid) {
 $(function() {
 	setInterval(checkPurchaseNotification, 60000);
 	setInterval(checkPurchaseSentNotification, 60000);
-	// setInterval(checkPurchaseReceivedNotification, 60000);
 	checkPurchaseNotification();
 	checkPurchaseSentNotification();
-	// checkPurchaseReceivedNotification();
 });

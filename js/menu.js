@@ -392,35 +392,7 @@ $(function() {
 	// 	});
 	// }
 
-	// function createRating(rate, id) {
-	// 	let formData = new FormData();
-	// 	formData.append('id', id);
-	// 	formData.append('rate', rate);
-	// 	$.ajax({
-	// 		type: "POST",
-	// 		url: 'scripts/createRating.php',
-	// 		cache: false,
-	// 		contentType: false,
-	// 		processData: false,
-	// 		dataType: 'json',
-	// 		data: formData,
-	// 		success: function(result) {
-	// 			if (result) {
-	// 				if (result == 4)
-	// 					showMessage("Успешно зададен рейтинг.");
-	// 				else if (result == 3)
-	// 					showMessage("Неуспешно задаване на рейтинг.");
-	// 				else if (result == 2)
-	// 					showMessage("Рейтингът може да е само между + и -");
-	// 				else if (result == 1)
-	// 					showMessage("Тази поръчка не е ваша.");
-	// 				else
-	// 					showMessage("Неуспешно задаване на рейтинг.");
-	// 				$("#window").modal('hide');
-	// 			}
-	// 		},
-	// 	});
-	// }
+
 
 function validateEmail(email) {
 	if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
@@ -443,8 +415,13 @@ function validateEmail(email) {
 					$('#window').modal('hide');
 					$("#menuLogin").html(newMenu);
 					$(".navbar-brand").attr('user',result.uid);
+				} else {
+					$("#menuLogin").html(oldMenu);
 				}
 			},
+			error: function() {
+				$("#menuLogin").html(oldMenu);
+			}
 		});
 	}
 
@@ -545,10 +522,6 @@ function validateEmail(email) {
 	$(document).on('click','#close-payment-href', function(){
 		$("#item-window").modal('hide');
 	});
-	
-	$()
-
-  $("#menuLogin").html(oldMenu);
   loadAccount();
 });
 
@@ -628,6 +601,8 @@ function loadItemTable(id, title, price) {
 	$(document).off('click','.item-table-'+id);
 	$(document).on('click','.item-table-'+id, function(){
 		viewItem(id)
+		clearReceivedPurchasesNotifications(id);
+		clearRatingNotifications(id);
 	});
 }
 

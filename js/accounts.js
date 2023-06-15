@@ -55,11 +55,11 @@ function loadAccountPage() {
         if (result.data[3]) {
           for (i = 0; i < result.data[3].length; i++) {
             count++;
-            if (result.data[3][i].rating == "2") {
+            if (result.data[3][i].rating == "1") {
               rate = "+";
               good++;
             }
-            else if (result.data[3][i].rating == "1") {
+            else if (result.data[3][i].rating == "2") {
               rate = "-";
               bad++;
             }
