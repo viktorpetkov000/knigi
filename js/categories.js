@@ -1,4 +1,12 @@
 let items = 0;
+let sort = 0;
+let priceLow = -1;
+let priceHigh = -1;
+let priceHighReturn = 0;
+let priceLowReturn = 0;
+let globalPage = 0;
+let lastPage = false;
+
 $(function() {
   function getTopArticles() {
     $.ajax({
@@ -11,9 +19,8 @@ $(function() {
       data: [],
       success: function(result) {
         if (result) {
-          for (let i = 0; i < result.items.length; i++) {
+          for (let i = 0; i < result.items.length; i++)
             loadTopArticles(result.items[i].id, result.items[i].image, result.items[i].title, result.items[i].price);
-          }
         } else
           showMessage("Няма открити резултати.");
           $(".cat-main-items").html("");
@@ -44,12 +51,19 @@ $(function() {
   }
   
   function searchCategories(id, page) {
+    lastPage = false;
     $(".cat-header-text").html(categories.main[id]);
     let subCategories = ``
     if (page >= 0) {
       let formData = new FormData();
       formData.append('category', id)
       formData.append('page', parseInt(page))
+      if (sort)
+        formData.append('sort', sort)
+      if (priceLow > 0 && priceHigh > 0) {
+        formData.append('priceHigh', priceHigh);
+        formData.append('priceLow', priceLow);
+      }
       $.ajax({
         type: "POST",
         url: 'scripts/searchCategories.php',
@@ -96,9 +110,18 @@ $(function() {
                     </div>
                   </div>
                 </div>`);
-                $(document).off('click','#cat-item-view-' + result.items[i].id);
-                $(document).on('click','#cat-item-view-' + result.items[i].id, function(){
-                  viewItem(result.items[i].id);
+                priceLowReturn = result.priceLowReturn;
+                priceHighReturn = result.priceHighReturn;
+                let itemId = result.items[i].id;
+                if (result.items.length < 6)
+                  lastPage = true;
+                $(".js-range-slider-price").data("ionRangeSlider").update({
+                  min: priceLowReturn,
+                  max: priceHighReturn,
+                })
+                $(document).off('click','#cat-item-view-' + itemId);
+                $(document).on('click','#cat-item-view-' + itemId, function(){
+                  viewItem(itemId);
                 });
               let formData = new FormData();
               formData.append('id', parseInt(result.items[i].id))
@@ -142,12 +165,13 @@ $(function() {
             showMessage("Няма открити резултати.");
             $(".cat-main-items").html("");
           }
-        },
+        }
       });
     }
   }
   
   function searchSubCategories(id, mainId, page) {
+    lastPage = false;
     $(".cat-header-text").html(categories.sub[mainId][id]);
     let subCategories2 = ``
     if (page >= 0) {
@@ -155,6 +179,12 @@ $(function() {
       formData.append('category', mainId)
       formData.append('subCategory', id)
       formData.append('page', parseInt(page))
+      if (sort)
+        formData.append('sort', sort)
+      if (priceLow > 0 && priceHigh > 0) {
+        formData.append('priceHigh', priceHigh);
+        formData.append('priceLow', priceLow);
+      }
       $.ajax({
         type: "POST",
         url: 'scripts/searchCategories.php',
@@ -201,7 +231,15 @@ $(function() {
                     </div>
                   </div>
                 </div>`);
+                priceLowReturn = result.priceLowReturn;
+                priceHighReturn = result.priceHighReturn;
+                $(".js-range-slider-price").data("ionRangeSlider").update({
+                  min: priceLowReturn,
+                  max: priceHighReturn,
+                })
                 let fixid = result.items[i].id;
+                if (result.items.length < 6)
+                  lastPage = true;
                 $(document).off('click','#cat-sub-item-view-' + result.items[i].id)
                 $(document).on('click','#cat-sub-item-view-' + result.items[i].id, function(){
                   viewItem(fixid);
@@ -253,6 +291,7 @@ $(function() {
   }
   
   function searchSubCategories2(id, subId, mainId, page) {
+    lastPage = false;
     $(".cat-header-text").html(categories.sub2[mainId][subId][id]);
     if (page >= 0) {
       let formData = new FormData();
@@ -260,6 +299,12 @@ $(function() {
       formData.append('subCategory', subId)
       formData.append('subCategory2', id)
       formData.append('page', parseInt(page))
+      if (sort)
+        formData.append('sort', sort)
+      if (priceLow > 0 && priceHigh > 0) {
+        formData.append('priceHigh', priceHigh);
+        formData.append('priceLow', priceLow);
+      }
       $.ajax({
         type: "POST",
         url: 'scripts/searchCategories.php',
@@ -306,7 +351,15 @@ $(function() {
                     </div>
                   </div>
                 </div>`);
+                priceLowReturn = result.priceLowReturn;
+                priceHighReturn = result.priceHighReturn;
+                $(".js-range-slider-price").data("ionRangeSlider").update({
+                  min: priceLowReturn,
+                  max: priceHighReturn,
+                })
               let fixid2 = result.items[i].id;
+              if (result.items.length < 6)
+                lastPage = true;
               $(document).off('click','#cat-sub2-item-view-' + result.items[i].id)
               $(document).on('click','#cat-sub2-item-view-' + result.items[i].id, function(){
                 viewItem(fixid2);
@@ -365,53 +418,91 @@ $(function() {
   };
 
   $(".js-range-slider-price").ionRangeSlider({
-    skin: "big"
+    skin: "big",
+    type: "double",
+    min: priceLowReturn,
+    max: priceHighReturn,
+    onFinish: function (data) {
+      priceLow = data.from;
+      priceHigh = data.to;
+      refreshSearch();
+    },
   });
-  $(".js-range-slider-size").ionRangeSlider({
-    skin: "big"
+
+  // $(".js-range-slider-size").ionRangeSlider({
+  //   skin: "big"
+  // });
+
+  $('input[name="sort"]').change(function() {
+    if ($(this).is(':checked')) {
+      sort = $(this).val();
+      refreshSearch();
+    }
+  });
+
+  function refreshSearch() {
+    if (getUrlParameter('page') && getUrlParameter('cat')) {
+      globalPage = getUrlParameter('page');
+      if (typeof getUrlParameter('subcat2') !== 'undefined') {
+        searchSubCategories2(getUrlParameter('subcat2'), getUrlParameter('subcat'), getUrlParameter('cat'), globalPage);
+        let subCategories = '';
+        for (let i = 0; i < categories.sub[getUrlParameter('cat')].length; i++) {
+          subCategories += `<label class="b-contain"><input type="radio" name="radio-cat" id="sub-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub[getUrlParameter('cat')][i] + `</span></span></label>`;
+          $(document).off('click','#sub-' + i);
+          $(document).on('click','#sub-' + i, function(){
+            searchSubCategories(i,getUrlParameter('cat'),0)
+          });
+        }
+        $(".cat-year-list").html(subCategories);
+        $("#sub-" + getUrlParameter('subcat')).prop("checked", true);
+        let subCategories2 = '';
+        for (let i = 0; i < categories.sub2[getUrlParameter('cat')][getUrlParameter('subcat')].length; i++) {
+          subCategories2 += `<label class="b-contain"><input type="radio" name="radio-cat-2" id="sub2-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub2[getUrlParameter('cat')][getUrlParameter('subcat')][i] + `</span></span></label>`;
+          $(document).off('click','#sub2-' + i);
+          $(document).on('click','#sub2-' + i, function(){
+            searchSubCategories2(i,getUrlParameter('subcat'),getUrlParameter('cat'),0)
+          });
+        }
+        $(".cat-subcat-list").html(subCategories2);
+        $("#sub2-" + getUrlParameter('subcat2')).prop("checked", true);
+      }
+      else if (typeof getUrlParameter('subcat') !== 'undefined') {
+        searchSubCategories(getUrlParameter('subcat'), getUrlParameter('cat'), globalPage);
+        let subCategories = '';
+        for (let i = 0; i < categories.sub[getUrlParameter('cat')].length; i++) {
+          subCategories += `<label class="b-contain"><input type="radio" name="radio-cat" id="sub-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub[getUrlParameter('cat')][i] + `</span></span></label>`;
+          $(document).off('click','#sub-' + i);
+          $(document).on('click','#sub-' + i, function(){
+            searchSubCategories(i,getUrlParameter('cat'),0)
+          });
+        }
+        $(".cat-year-list").html(subCategories);
+        $("#sub-" + getUrlParameter('subcat')).prop("checked", true);
+      }
+      else if (typeof getUrlParameter('cat') !== 'undefined') {
+        searchCategories(getUrlParameter('cat'), globalPage);
+      }
+    } else {
+      searchCategories(0,0);
+    }
+  }
+  $(document).on('click','.cat-main-pages-left-button', function(){
+    if (globalPage > 0) {
+      globalPage--;
+      window.history.replaceState(null, null, window.location.href.replace(/&page=\d+/, "&page=" + globalPage));
+      refreshSearch();
+    }
+    else
+      showMessage("Няма предишни страници.");
+  });
+  $(document).on('click','.cat-main-pages-right-button', function(){
+    if (!lastPage) {
+      globalPage++;
+      window.history.replaceState(null, null, window.location.href.replace(/&page=\d+/, "&page=" + globalPage));
+      refreshSearch();
+    } else
+      showMessage("Няма повече резултати.")
   });
   getTopArticles();
-  if (getUrlParameter('page') && getUrlParameter('cat')) {
-    if (typeof getUrlParameter('subcat2') !== 'undefined') {
-      searchSubCategories2(getUrlParameter('subcat2'), getUrlParameter('subcat'), getUrlParameter('cat'), getUrlParameter('page'));
-      let subCategories = '';
-      for (let i = 0; i < categories.sub[getUrlParameter('cat')].length; i++) {
-        subCategories += `<label class="b-contain"><input type="radio" name="radio-cat" id="sub-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub[getUrlParameter('cat')][i] + `</span></span></label>`;
-        $(document).off('click','#sub-' + i);
-        $(document).on('click','#sub-' + i, function(){
-          searchSubCategories(i,getUrlParameter('cat'),0)
-        });
-      }
-      $(".cat-year-list").html(subCategories);
-      $("#sub-" + getUrlParameter('subcat')).prop("checked", true);
-      let subCategories2 = '';
-      for (let i = 0; i < categories.sub2[getUrlParameter('cat')][getUrlParameter('subcat')].length; i++) {
-        subCategories2 += `<label class="b-contain"><input type="radio" name="radio-cat-2" id="sub2-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub2[getUrlParameter('cat')][getUrlParameter('subcat')][i] + `</span></span></label>`;
-        $(document).off('click','#sub2-' + i);
-        $(document).on('click','#sub2-' + i, function(){
-          searchSubCategories2(i,getUrlParameter('subcat'),getUrlParameter('cat'),0)
-        });
-      }
-      $(".cat-subcat-list").html(subCategories2);
-      $("#sub2-" + getUrlParameter('subcat2')).prop("checked", true);
-    }
-    else if (typeof getUrlParameter('subcat') !== 'undefined') {
-      searchSubCategories(getUrlParameter('subcat'), getUrlParameter('cat'), getUrlParameter('page'));
-      let subCategories = '';
-      for (let i = 0; i < categories.sub[getUrlParameter('cat')].length; i++) {
-        subCategories += `<label class="b-contain"><input type="radio" name="radio-cat" id="sub-` + i + `" value="` + i + `"><div class="b-input"></div><span class="cat-sort-option-text">` + categories.sub[getUrlParameter('cat')][i] + `</span></span></label>`;
-        $(document).off('click','#sub-' + i);
-        $(document).on('click','#sub-' + i, function(){
-          searchSubCategories(i,getUrlParameter('cat'),0)
-        });
-      }
-      $(".cat-year-list").html(subCategories);
-      $("#sub-" + getUrlParameter('subcat')).prop("checked", true);
-    }
-    else if (typeof getUrlParameter('cat') !== 'undefined') {
-      searchCategories(getUrlParameter('cat'), getUrlParameter('page'));
-    }
-  } else {
-    searchCategories(0,0);
-  }
+  refreshSearch();
 });

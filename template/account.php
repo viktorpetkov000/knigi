@@ -1,9 +1,19 @@
 <div class="container-fluid flex-row" id="middle-container">
   <div id="account-page-container">
     <h4 id="account-page-title"></h4>
-    <p id="account-page-items-ended"></p>
-    <p id="account-page-items-active"></p>
-    <p id="account-page-purchases"></p>
+    <div class="row" style="margin: auto;">
+      <div class="col-md-3">
+        <p id="account-page-items-ended"></p>
+        <p id="account-page-items-active"></p>
+        <p id="account-page-purchases"></p>
+      </div>
+      <div class="col-md-2">
+        <div class="account-contact">
+          <span class="item-window-info2-contact-text">СВЪРЖИ СЕ С ТЪРГОВЕЦА</span>
+          <img src="./assets/contact.png" class="item-window-info2-contact-image"/>
+        </div>
+      </div>
+    </div>
     <div class="row" style="margin: auto;">
       <div class="col-md-8">
         <div id="account-page-rates-container">

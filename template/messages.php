@@ -4,6 +4,9 @@
       <div id="contacts-list"></div>
     </div>
     <div class="col-sm-10">
+      <div id="chat-header">
+        <h5 id="chat-title"></h5>
+      </div>
       <div id="chat-container">
         <div id="chat">
           <div id="messages-show"></div>

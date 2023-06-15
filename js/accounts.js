@@ -34,7 +34,9 @@ function loadAccountPage() {
         let good = 0;
         let bad = 0;
         if (result.data[4]) {
+          $("#account-page-details-container-sales").css('display','block')
           $("#account-page-details-container").css('display','block')
+          $(".account-contact").css('display','none')
           if (result.data[0].address)
             $("#account-page-details-address").html(result.data[0].address)
           if (result.data[0].phone)
@@ -43,6 +45,11 @@ function loadAccountPage() {
             $("#account-page-details-iban").html(result.data[0].iban)
         } else {
           $("#account-page-details-container").css('display','none')
+          $(".account-contact").css('display','inline-flex')
+          $(document).off('click','.account-contact');
+          $(document).on('click','.account-contact', function(){
+            contactSeller(result.data[0].uid);
+          });
           $("#account-page-details-container-sales").css('display','none')
         }
         if (result.data[3]) {

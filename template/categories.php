@@ -20,10 +20,10 @@
               <img src="./assets/lines.png" class="cat-sort-title-img">
             </div>
             <div class="cat-sort-options">
-              <label class="b-contain"><input type="radio" id="desc" class="desc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена низходяща</span></label>
-              <label class="b-contain"><input type="radio" id="asc" class="asc" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена възходяща</span></label>
-              <label class="b-contain"><input type="radio" id="new" class="new" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-нови</span></label>
-              <label class="b-contain"><input type="radio" id="popular" class="popular" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-популярни</span></label>
+              <label class="b-contain"><input type="radio" id="new" class="new"  value="0" name="sort" checked><div class="b-input"></div><span class="cat-sort-option-text">най-нови</span></label>
+              <label class="b-contain"><input type="radio" id="popular" class="popular" value="1" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">най-популярни</span></label>
+              <label class="b-contain"><input type="radio" id="desc" class="desc" value="2" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена низходяща</span></label>
+              <label class="b-contain"><input type="radio" id="asc" class="asc" value="3" name="sort"><div class="b-input"></div><span class="cat-sort-option-text">цена възходяща</span></label>
             </div>
           </div>
           <div class="cat-price-container">
@@ -34,14 +34,14 @@
             </div>
             <input type="text" class="js-range-slider-price" name="my_range" value=""/>
           </div>
-          <div class="cat-size-container">
+          <!-- <div class="cat-size-container">
             <div class="cat-sort-title">
               <img src="./assets/lines.png" class="cat-sort-title-img">
               <span class="cat-sort-title-text">Обем:</span>
               <img src="./assets/lines.png" class="cat-sort-title-img">
             </div>
             <input type="text" class="js-range-slider-size" name="my_range" value=""/>
-          </div>
+          </div> -->
           <div class="cat-year-container">
             <div class="cat-sort-title">
               <img src="./assets/lines.png" class="cat-sort-title-img">
@@ -75,9 +75,15 @@
             </div>
           </div>
           <div class="cat-main-separator"></div>
-          <div class="cat-main-pages">
-          </div>
           <div class="cat-main-items">
+          </div>
+          <div class="cat-main-pages">
+            <div class="cat-main-pages-left-button">
+              <svg class="flickity-button-icon page-cat-left" viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow"></path></svg>
+            </div>
+            <div class="cat-main-pages-right-button">
+              <svg class="flickity-button-icon page-cat-right" viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow" transform="translate(100, 100) rotate(180) "></path></svg>
+            </div>
           </div>
         </div>
       </div>

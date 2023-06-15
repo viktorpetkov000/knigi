@@ -183,11 +183,14 @@ $(function() {
       dataType: 'json',
       data: formData,
       success: function(result) {
-        if (result == 5) {
+        if (result.code == 5) {
+          console.log(result);
           let message = "";
           $("#chat").html(chat);
           refresher = setInterval(function(){ refreshMessages(contact) }, 1000);
-        } else if (result) {
+          $("#chat-title").html(result.username);
+        } else if (result.code == 4) {
+          console.log(result);
           let message = "";
           $("#chat").html(chat);
           for (i = 0; i < result.data.length; i++) {
@@ -197,6 +200,7 @@ $(function() {
               message = `<div class="my-message-container"><span class="my-message-bubble tooltiptext" data-text="` + result.data[i].created + `">` + result.data[i].message  + `</span></div>`;
             $("#messages-show").append(message);
           }
+          $("#chat-title").html(result.username);
           $("#messages-show").scrollTop($('#messages-show')[0].scrollHeight);
           refresher = setInterval(function(){ refreshMessages(contact) }, 1000);
         }
