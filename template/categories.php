@@ -13,6 +13,16 @@
       </div>
       <div class="cat-container">
         <div class="cat-settings-container">
+          <div class="cat-search-container">
+            <div class="cat-search-title">
+              <img src="./assets/lines.png" class="cat-sort-title-img">
+              <span class="cat-search-title-text">Търси:</span>
+              <img src="./assets/lines.png" class="cat-sort-title-img">
+            </div>
+            <div>
+              <input type="text" class="cat-search-input form-control input-1" placeholder="Заглавие..">
+            </div>
+          </div>
           <div class="cat-sort-container">
             <div class="cat-sort-title">
               <img src="./assets/lines.png" class="cat-sort-title-img">

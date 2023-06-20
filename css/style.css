@@ -1646,14 +1646,18 @@ body {
 	width: 20%;
 }
 
-.cat-sort-container {
+.cat-sort-container, .cat-search-container {
 	padding: 18px 12px;
 	background: linear-gradient(79.39deg, #D6C9BE -14.67%, #FDF4EC 68.12%);
 	box-shadow: inset 0px 0px 50px rgba(141, 114, 114, 0.5);
 	border-radius: 2px;
 }
 
-.cat-sort-title {
+.cat-search-container {
+	margin-bottom: 20px;
+}
+
+.cat-sort-title, .cat-search-title {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1666,11 +1670,11 @@ body {
 	height: 9px;
 }
 
-.cat-sort-title-text {
+.cat-sort-title-text, .cat-search-title-text {
 	font-family: Open Sans;
 	font-style: normal;
 	font-weight: normal;
-	font-size: 24px;
+	font-size: 20px;
 	line-height: 33px;
 	color: #720026;
 	margin: 0px 4%;

@@ -6,6 +6,7 @@ let priceHighReturn = 0;
 let priceLowReturn = 0;
 let globalPage = 0;
 let lastPage = false;
+let titleName = "";
 
 $(function() {
   function getTopArticles() {
@@ -64,6 +65,8 @@ $(function() {
         formData.append('priceHigh', priceHigh);
         formData.append('priceLow', priceLow);
       }
+      if (titleName)
+        formData.append('name', titleName)
       $.ajax({
         type: "POST",
         url: 'scripts/searchCategories.php',
@@ -185,6 +188,8 @@ $(function() {
         formData.append('priceHigh', priceHigh);
         formData.append('priceLow', priceLow);
       }
+      if (titleName)
+        formData.append('name', titleName)
       $.ajax({
         type: "POST",
         url: 'scripts/searchCategories.php',
@@ -305,6 +310,8 @@ $(function() {
         formData.append('priceHigh', priceHigh);
         formData.append('priceLow', priceLow);
       }
+      if (titleName)
+        formData.append('name', titleName)
       $.ajax({
         type: "POST",
         url: 'scripts/searchCategories.php',
@@ -502,6 +509,11 @@ $(function() {
       refreshSearch();
     } else
       showMessage("Няма повече резултати.")
+  });
+
+  $(document).on('change','.cat-search-input', function(){
+    titleName = this.value;
+    refreshSearch();
   });
   getTopArticles();
   refreshSearch();
