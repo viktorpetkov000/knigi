@@ -139,7 +139,7 @@ function viewItem(id, mode) {
 						});
 					}
 				}
-				if (ended == 1) {
+				if (ended == 1 && buyerUid > 0) {
 					$(".item-window-save").css('display','none');
 					$(".item-window-info2-contact").css('display','none');
 					if (result.ownItem) {
