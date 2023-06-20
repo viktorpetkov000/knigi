@@ -1970,7 +1970,7 @@ body {
 	height: 80px;
 }
 
-.item-window-info2-profile {
+.item-window-info2-profile, .item-window-info2-remove {
 	background: #FFFBF8;
 	box-shadow: inset 0px 0px 20px rgba(79, 0, 11, 0.4);
 	border-radius: 5px;
@@ -1985,7 +1985,11 @@ body {
 	height: 60px;
 }
 
-.item-window-info2-contact-text, .item-window-info2-profile-text, .item-window-info2-profile-text-name {
+.item-window-info2-remove {
+	display: none;
+}
+
+.item-window-info2-contact-text, .item-window-info2-profile-text, .item-window-info2-profile-text-name, .item-window-info2-remove-text-name {
 	font-family: Yanone Kaffeesatz;
 	font-style: normal;
 	font-weight: normal;
@@ -1996,7 +2000,7 @@ body {
 	color: #4F000B;
 }
 
-.item-window-info2-profile-text {
+.item-window-info2-profile-text, .item-window-info2-remove-text  {
 	font-size: 14px;
 	position: absolute;
 	top: 5%;
@@ -2006,7 +2010,7 @@ body {
 	position: absolute;
 }
 
-.item-window-info2-profile-image {
+.item-window-info2-profile-image, .item-window-info2-remove-image {
 	position: absolute;
 	opacity: 30%;
 	width: 30%;

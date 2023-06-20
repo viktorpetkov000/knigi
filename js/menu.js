@@ -606,42 +606,42 @@ function loadItemTable(id, title, price) {
 	});
 }
 
-function viewTableItem(id) {
-	let formData = new FormData();
-	formData.append('id', id);
-	$.ajax({
-		type: "POST",
-		url: 'scripts/getItem.php',
-		cache: false,
-		contentType: false,
-		processData: false,
-		dataType: 'json',
-		data: formData,
-		success: function(result) {
-			if (result) {
-				$("#windowForm").html(
-					`<i class="fas fa-arrow-left" id="item-table-back"></i>
-					<div class="d-flex flex-column text-center" id="addButton">
-						<img src="files/` + result.items[0].image + `" class="item-large-image">
-						<div class="item-large-price">` + result.items[0].price + `лв</div>
-						<div class="item-large-descr">` + result.items[0].descr + `</div>
-					</div>`);
-					if (result.items[0].ended == 0 && $(".navbar-brand").attr('user',) == result.items[0].uid)
-						$("#addButton").append(`<button type="button" id="removeButton" class="item-table-remove-button-` + id + ` btn btn-info btn-block btn-round">Премахни продажбата</button>`)
-				$("#window").modal('show');
-				$("#windowTitle").html(result.items[0].title);
-				$(document).off('click','#item-table-back');
-				$(document).off('click','.item-table-remove-button-' + id);
-				$(document).on('click','#item-table-back', function(){
-					getUserItems(result.items[0].ended,result.items[0].uid);
-				});
-				$(document).on('click','.item-table-remove-button-' + id, function(){
-					removeItemConfirm(id);
-				});
-			}
-		},
-	});
-}
+// function viewTableItem(id) {
+// 	let formData = new FormData();
+// 	formData.append('id', id);
+// 	$.ajax({
+// 		type: "POST",
+// 		url: 'scripts/getItem.php',
+// 		cache: false,
+// 		contentType: false,
+// 		processData: false,
+// 		dataType: 'json',
+// 		data: formData,
+// 		success: function(result) {
+// 			if (result) {
+// 				$("#windowForm").html(
+// 					`<i class="fas fa-arrow-left" id="item-table-back"></i>
+// 					<div class="d-flex flex-column text-center" id="addButton">
+// 						<img src="files/` + result.items[0].image + `" class="item-large-image">
+// 						<div class="item-large-price">` + result.items[0].price + `лв</div>
+// 						<div class="item-large-descr">` + result.items[0].descr + `</div>
+// 					</div>`);
+// 					if (result.items[0].ended == 0 && $(".navbar-brand").attr('user',) == result.items[0].uid)
+// 						$("#addButton").append(`<button type="button" id="removeButton" class="item-table-remove-button-` + id + ` btn btn-info btn-block btn-round">Премахни продажбата</button>`)
+// 				$("#window").modal('show');
+// 				$("#windowTitle").html(result.items[0].title);
+// 				$(document).off('click','#item-table-back');
+// 				$(document).off('click','.item-table-remove-button-' + id);
+// 				$(document).on('click','#item-table-back', function(){
+// 					getUserItems(result.items[0].ended,result.items[0].uid);
+// 				});
+// 				$(document).on('click','.item-table-remove-button-' + id, function(){
+// 					removeItemConfirm(id);
+// 				});
+// 			}
+// 		},
+// 	});
+// }
 
 function viewPurchases(page) {
 	let formData = new FormData();
@@ -713,59 +713,33 @@ function loadPurchases(id, title, price) {
 	});
 }
 
-function removeItem(id) {
-	let formData = new FormData();
-	formData.append('id', id);
-	$.ajax({
-		type: "POST",
-		url: 'scripts/removeItem.php',
-		cache: false,
-		contentType: false,
-		processData: false,
-		dataType: 'json',
-		data: formData,
-		success: function(result) {
-			if (result == 1)
-				showMessage("Моля влезте в профила си.");
-			else if (result == 2)
-				showMessage("Невалидна продажба.");
-			else if (result == 3)
-				showMessage("Тази продажба е приключила.");
-			else if (result == 4) {
-				showMessage("Успешно прекратяване на продажба.")
-				$("#confirm").remove();
-			}
-		},
-	});
-}
+// function removeItemConfirm(id) {
+// 	$("#removeButton").remove();
+// 	$("#addButton").append(
+// 			`<div class="d-flex text-center" id="confirm">
+// 					<button type="button" id="removeButton-confirm" class="btn btn-info btn-block btn-round" style="margin-top: 9px">Потвърди премахване</button>
+// 					<button type="button" id="cancel-remove-item-button" class="btn btn-info btn-block btn-round" style="margin-top: 9px">Отказ</button>
+// 			</div>`
+// 	);
+// 	$('#window').modal('show');
+// 	$(document).off('click','#removeButton-confirm');
+// 	$(document).off('click','#cancel-remove-item-button');
+// 	$(document).on('click','#removeButton-confirm', function(){
+// 		removeItem(id)
+// 	});
+// 	$(document).on('click','#cancel-remove-item-button', function(){
+// 		cancelRemoveItem(id)
+// 	});
+// }
 
-function removeItemConfirm(id) {
-	$("#removeButton").remove();
-	$("#addButton").append(
-			`<div class="d-flex text-center" id="confirm">
-					<button type="button" id="removeButton-confirm" class="btn btn-info btn-block btn-round" style="margin-top: 9px">Потвърди премахване</button>
-					<button type="button" id="cancel-remove-item-button" class="btn btn-info btn-block btn-round" style="margin-top: 9px">Отказ</button>
-			</div>`
-	);
-	$('#window').modal('show');
-	$(document).off('click','#removeButton-confirm');
-	$(document).off('click','#cancel-remove-item-button');
-	$(document).on('click','#removeButton-confirm', function(){
-		removeItem(id)
-	});
-	$(document).on('click','#cancel-remove-item-button', function(){
-		cancelRemoveItem(id)
-	});
-}
-
-function cancelRemoveItem(id) {
-	$("#confirm").remove();
-	$("#addButton").append(`<button type="button" id="removeButton-cancel" class="btn btn-info btn-block btn-round">Премахни продажбата</button>`)
-	$(document).off('click','#removeButton-cancel');
-	$(document).on('click','#removeButton-cancel', function(){
-		removeItemConfirm(id);
-	});
-}
+// function cancelRemoveItem(id) {
+// 	$("#confirm").remove();
+// 	$("#addButton").append(`<button type="button" id="removeButton-cancel" class="btn btn-info btn-block btn-round">Премахни продажбата</button>`)
+// 	$(document).off('click','#removeButton-cancel');
+// 	$(document).on('click','#removeButton-cancel', function(){
+// 		removeItemConfirm(id);
+// 	});
+// }
 
 function loadSubCategories1() {
 	if ($("#subCategory1Group").length)

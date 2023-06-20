@@ -92,6 +92,10 @@ function viewItem(id, mode) {
 							</div>
 							<div id="item-window-options">
 							</div>
+							<div class="item-window-info2-remove">
+								<span class="item-window-info2-remove-text-name">Премахни</span>
+								<img src="./assets/return.png" class="item-window-info2-remove-image"/>
+							</div>
 							<div class="item-window-info2-profile">
 								<span class="item-window-info2-profile-text">Потребител: </span>
 								<span class="item-window-info2-profile-text-name"></span>
@@ -126,6 +130,15 @@ function viewItem(id, mode) {
 				$(document).on('click','.item-window-info2-profile', function(){
 					window.location.href = './account.php?uid='+sellerUid;
 				});
+				if (ended == 0) {
+					if (result.ownItem) {
+						$('.item-window-info2-remove').css('display','flex')
+						$(document).off('click','.item-window-info2-remove');
+						$(document).on('click','.item-window-info2-remove', function(){
+							removeItem(itemId);
+						});
+					}
+				}
 				if (ended == 1) {
 					$(".item-window-save").css('display','none');
 					$(".item-window-info2-contact").css('display','none');
@@ -489,6 +502,32 @@ function clearSentPurchasesNotifications(id) {
 			if (result)
 				checkPurchaseSentNotification();
 		}
+	});
+}
+
+function removeItem(id) {
+	let formData = new FormData();
+	formData.append('id', id);
+	$.ajax({
+		type: "POST",
+		url: 'scripts/removeItem.php',
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		data: formData,
+		success: function(result) {
+			if (result == 1)
+				showMessage("Моля влезте в профила си.");
+			else if (result == 2)
+				showMessage("Невалидна продажба.");
+			else if (result == 3)
+				showMessage("Тази продажба е приключила.");
+			else if (result == 4) {
+				showMessage("Успешно прекратяване на продажба.")
+				$(".item-window-info2-remove").css("display","none");
+			}
+		},
 	});
 }
 
