@@ -16,6 +16,7 @@ function viewItem(id, mode) {
 		data: formData,
 		success: function(result) {
 			if (result) {
+				console.log(result);
 				$("#item-window-form").html(`
 				<div class="item-window-container">
 					<div class="item-window-topbar">
@@ -399,6 +400,9 @@ function viewItem(id, mode) {
 				}
       } else showMessage("Няма такава продажба.");
     },
+		error: function(result) {
+			console.log(result);
+		}
 	});
 }
 

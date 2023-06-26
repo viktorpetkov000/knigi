@@ -2,6 +2,7 @@
 	session_start();
   include('./db.php');
   $items = [];
+	$uid = "";
   if (isset($_POST['id']))
 		$id = $_POST['id'];
 	if (isset($_SESSION['uid']))
