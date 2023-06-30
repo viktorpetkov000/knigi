@@ -30,8 +30,12 @@
 		$category = $_POST['category'];
 	if (isset($_POST['subcategory']))
 		$subcategory = $_POST['subcategory'];
+	if ($subcategory < 0)
+		$subcategory = "NULL";
 	if (isset($_POST['subcategory2']))
 		$subcategory2 = $_POST['subcategory2'];
+	if ($subcategory2 < 0)
+		$subcategory2 = "NULL";
 	if (isset($_POST['condit']))
 		$condit = $_POST['condit'];
 	if (isset($_SESSION['uid']))
@@ -44,7 +48,7 @@
 			while($row = $result->fetch_assoc())
 				$iban = $row["iban"];
 		if ($iban) {
-			if ($title != "" && $descr != "" && $price != "" && $descr != "" && $condit != "") {
+			if ($title != "" && $price != "" && $condit != "" && $category != "") {
 				if (isset($_FILES['files'])) {
 					$file_count = count($_FILES['files']['name']);
 					$files_arr = array();

@@ -93,10 +93,6 @@ $(function() {
                           <span class="cat-main-item-username">` + result.items[i].username + `</span>
                         </div>
                         <div class="cat-main-item-info-segment">
-                          <img src="./assets/location.png" class="cat-main-item-icon">
-                          <span class="cat-main-item-location">` + "Локация" + `</span>
-                        </div>
-                        <div class="cat-main-item-info-segment">
                           <img src="./assets/time.png" class="cat-main-item-icon">
                           <span class="cat-main-item-time">` + result.items[i].startdate + `</span>
                         </div>
@@ -216,10 +212,6 @@ $(function() {
                           <span class="cat-main-item-username">` + result.items[i].username + `</span>
                         </div>
                         <div class="cat-main-item-info-segment">
-                          <img src="./assets/location.png" class="cat-main-item-icon">
-                          <span class="cat-main-item-location">` + "Локация" + `</span>
-                        </div>
-                        <div class="cat-main-item-info-segment">
                           <img src="./assets/time.png" class="cat-main-item-icon">
                           <span class="cat-main-item-time">` + result.items[i].startdate + `</span>
                         </div>
@@ -336,10 +328,6 @@ $(function() {
                         <div class="cat-main-item-info-segment">
                           <img src="./assets/userpic.png" class="cat-main-item-icon">
                           <span class="cat-main-item-username">` + result.items[i].username + `</span>
-                        </div>
-                        <div class="cat-main-item-info-segment">
-                          <img src="./assets/location.png" class="cat-main-item-icon">
-                          <span class="cat-main-item-location">` + "Локация" + `</span>
                         </div>
                         <div class="cat-main-item-info-segment">
                           <img src="./assets/time.png" class="cat-main-item-icon">

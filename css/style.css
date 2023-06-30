@@ -1040,7 +1040,7 @@ body {
 .cat-name {
 	transition: all 0.2s ease-in-out;
 	opacity: 1;
-	margin-top: 4.5vh;
+	margin-top: 3vh;
 	padding-left: 5px;
 	padding-right: 5px;
 	padding-bottom: 5px;
@@ -1107,7 +1107,15 @@ body {
 	margin-top: 10px;
 	font-size: 24px;
 	color: #4F000B;
+	height: 18%;
+	width: 90%;
+	padding-left: 10px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
+
+
 
 .new-item-image {
 	width: 100%;
@@ -2468,6 +2476,10 @@ body {
 
 .item-table-row {
 	position: relative;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 10%;
 }
 
 .purchase-notification-bubble-item, .purchase-sent-notification-bubble-item {

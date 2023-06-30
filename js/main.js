@@ -445,6 +445,7 @@ function checkPurchaseNotification() {
 		dataType: 'json',
 		data: [],
 		success: function(result) {
+			console.log(result);
 			$(".purchase-notification-bubble-item").css("display","none");
 			$("#purchase-notification-bubble").css("display","none");
 			$("#purchase-notification-bubble-drop").css("display","none");
@@ -459,6 +460,9 @@ function checkPurchaseNotification() {
 						$('#purchase-notification-bubble-item-'+result.data[i].id).css('display','block');
 				}
 			}
+		},
+		error: function( result ) {
+			console.log(result);
 		}
 	});
 }

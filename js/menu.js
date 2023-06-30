@@ -304,18 +304,30 @@ $(function() {
 	}
 
 	function createItem() {
-		if (!($('#itemCategory').val() && $('#itemSubCategory1').val() && $('#itemSubCategory2').val())) {
-			showMessage("Моля изберете категории.");
+		// if (!($('#itemCategory').val() && $('#itemSubCategory1').val() && $('#itemSubCategory2').val())) {
+		// 	showMessage("Моля изберете категории.");
+		// 	return;
+		// }
+		if (!($('#itemCategory').val())) {
+			showMessage("Моля изберете категория.");
 			return;
 		}
+		let subcategory = -1;
+		let subcategory2 = -1;
+		if ($('#itemCategory1').val())
+			subcategory = $('#itemCategory1').val()
+		if ($('#itemCategory2').val())
+			subcategory2 = $('#itemCategory2').val()
 		let formData = new FormData();
 		formData.append('title', $('#itemTitle').val())
 		formData.append('author', $('#itemAuthor').val())
 		formData.append('descr', $('#itemDescr').val())
 		formData.append('price', $('#itemPrice').val())
 		formData.append('category', $('#itemCategory').val())
-		formData.append('subcategory', $('#itemSubCategory1').val())
-		formData.append('subcategory2', $('#itemSubCategory2').val())
+		console.log(subcategory);
+		console.log(subcategory2);
+		formData.append('subcategory', subcategory)
+		formData.append('subcategory2', subcategory2)
 		formData.append('condit', $('#itemCondition').val())
 		let filecount = $('#itemImage').prop('files').length;
 		for (i = 0; i < filecount; i++)
@@ -502,7 +514,7 @@ function validateEmail(email) {
 		loginAccount();
 	});
 
-	$(document).on('click','#hide-windowk', function(){
+	$(document).on('click','#hide-window', function(){
 		$('#window').modal('hide');
 	});
 
